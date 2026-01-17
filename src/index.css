@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-background text-text antialiased;
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
