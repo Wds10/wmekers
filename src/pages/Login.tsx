@@ -3,10 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Mail, Lock, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext'; // Import
 
 export default function Login() {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { t } = useLanguage(); // Hook
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -39,7 +41,7 @@ export default function Login() {
     return (
         <div className="max-w-md mx-auto py-12">
             <div className="bg-surface border border-white/10 rounded-2xl p-8 shadow-xl">
-                <h2 className="text-3xl font-bold mb-6 text-center">Welcome Back</h2>
+                <h2 className="text-3xl font-bold mb-6 text-center">{t.auth.welcome}</h2>
 
                 {error && (
                     <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-4 rounded-lg mb-6 flex items-center space-x-2">
@@ -50,7 +52,7 @@ export default function Login() {
 
                 <form onSubmit={handleLogin} className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Email Address</label>
+                        <label className="text-sm font-medium text-gray-300">{t.auth.email}</label>
                         <div className="relative">
                             <Mail className="absolute left-3 top-2.5 text-gray-500" size={20} />
                             <input
@@ -65,7 +67,7 @@ export default function Login() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Password</label>
+                        <label className="text-sm font-medium text-gray-300">{t.auth.password}</label>
                         <div className="relative">
                             <Lock className="absolute left-3 top-2.5 text-gray-500" size={20} />
                             <input
@@ -84,14 +86,14 @@ export default function Login() {
                         disabled={loading}
                         className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading ? 'Signing In...' : 'Sign In'}
+                        {loading ? '...' : t.auth.signin}
                     </button>
                 </form>
 
                 <p className="mt-6 text-center text-gray-400">
-                    Don't have an account?{' '}
+                    {t.auth.no_account}{' '}
                     <Link to="/register" className="text-primary hover:text-primary/80 font-medium">
-                        Sign Up
+                        {t.auth.signup}
                     </Link>
                 </p>
             </div>

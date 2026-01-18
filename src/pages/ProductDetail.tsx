@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import ThreeViewer from '../components/ThreeViewer';
 import { ShoppingCart, Download, User as UserIcon, Shield, ShoppingBag } from 'lucide-react';
 
 export default function ProductDetail() {
     const { id } = useParams();
     const { user, profile } = useAuth();
+    const { t } = useLanguage();
     const [model, setModel] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [signedUrl, setSignedUrl] = useState<string | null>(null);
@@ -184,16 +186,16 @@ export default function ProductDetail() {
                     <h1 className="text-4xl font-bold mb-2">{model.title}</h1>
                     <div className="flex items-center space-x-2 text-gray-400">
                         <UserIcon size={16} />
-                        <span>Created by <span className="text-white font-medium">{model.profiles?.full_name}</span></span>
+                        <span>{t.product.created_by} <span className="text-white font-medium">{model.profiles?.full_name}</span></span>
                     </div>
                 </div>
 
                 <div className="bg-surface border border-white/10 rounded-xl p-6 space-y-4">
                     <div className="flex items-center justify-between">
                         <span className="text-3xl font-bold text-primary">
-                            {model.price === 0 ? "Free" : `$${model.price}`}
+                            {model.price === 0 ? t.product.free : `$${model.price}`}
                         </span>
-                        <span className="text-xs font-mono px-2 py-1 bg-white/5 rounded border border-white/10">{model.license} License</span>
+                        <span className="text-xs font-mono px-2 py-1 bg-white/5 rounded border border-white/10">{model.license} {t.product.license}</span>
                     </div>
 
                     {!hasPurchased ? (
@@ -202,7 +204,7 @@ export default function ProductDetail() {
                                 disabled
                                 className="w-full py-4 bg-yellow-500/20 text-yellow-400 font-bold text-lg rounded-lg border border-yellow-500/50 cursor-not-allowed flex items-center justify-center space-x-2"
                             >
-                                <span>Verificando Pago...</span>
+                                <span>{t.product.verifying}</span>
                             </button>
                         ) : (
                             <button
@@ -214,11 +216,11 @@ export default function ProductDetail() {
                                 className="w-full py-4 bg-white text-black font-bold text-lg rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
                             >
                                 {purchasing ? (
-                                    <span>Processing...</span>
+                                    <span>{t.product.processing}</span>
                                 ) : (
                                     <>
                                         <ShoppingCart size={20} />
-                                        <span>Pagar</span>
+                                        <span>{t.product.pay}</span>
                                     </>
                                 )}
                             </button>
@@ -230,14 +232,14 @@ export default function ProductDetail() {
                         >
                             <Download size={20} />
                             <span>
-                                {model.price === 0 ? "Download Free" : "Download Model"}
+                                {t.product.download}
                             </span>
                         </button>
                     )}
 
                     {user?.id === model.seller_id && (
                         <div className="text-center text-sm text-gray-400 pt-2">
-                            You own this model
+                            {t.product.owned}
                         </div>
                     )}
                 </div>
@@ -253,7 +255,7 @@ export default function ProductDetail() {
                     <div className="flex items-start space-x-3 text-sm text-gray-400">
                         <Shield size={20} className="text-primary mt-1" />
                         <div>
-                            <p className="text-white font-medium mb-1">Secure Transaction</p>
+                            <p className="text-white font-medium mb-1">{t.product.secure}</p>
                             <p>Processed via {profile?.country === 'Argentina' ? 'Mercado Pago' : 'PayPal'}.</p>
                         </div>
                     </div>

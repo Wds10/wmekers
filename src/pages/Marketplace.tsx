@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Search, ShoppingBag } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Marketplace() {
+    const { t } = useLanguage();
     const [models, setModels] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
@@ -44,9 +46,9 @@ export default function Marketplace() {
         <div className="space-y-8">
             {/* Header & Filters */}
             <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
-                <h1 className="text-3xl font-bold">Marketplace</h1>
+                <h1 className="text-3xl font-bold">{t.nav.market}</h1>
 
-                <div className="flex w-full md:w-auto gap-4">
+                <div className="flex flex-col w-full md:w-auto gap-4 md:flex-row">
                     <div className="relative flex-1 md:w-64">
                         <Search className="absolute left-3 top-2.5 text-gray-400" size={20} />
                         <input
@@ -59,10 +61,10 @@ export default function Marketplace() {
                     </div>
 
                     {/* Category Buttons */}
-                    <div className="flex gap-2 overflow-x-auto pb-2">
+                    <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
                         <button
                             onClick={() => setSelectedCategory('All')}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedCategory === 'All'
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${selectedCategory === 'All'
                                 ? 'bg-primary text-white'
                                 : 'bg-surface border border-white/10 text-gray-400 hover:text-white'
                                 }`}
@@ -71,7 +73,7 @@ export default function Marketplace() {
                         </button>
                         <button
                             onClick={() => setSelectedCategory('Free')}
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedCategory === 'Free'
+                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${selectedCategory === 'Free'
                                 ? 'bg-green-500/20 text-green-400 border border-green-500/50'
                                 : 'bg-surface border border-white/10 text-gray-400 hover:text-white'
                                 }`}
@@ -82,7 +84,7 @@ export default function Marketplace() {
                             <button
                                 key={cat}
                                 onClick={() => setSelectedCategory(cat)}
-                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${selectedCategory === cat
+                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${selectedCategory === cat
                                     ? 'bg-primary text-white'
                                     : 'bg-surface border border-white/10 text-gray-400 hover:text-white'
                                     }`}
@@ -119,7 +121,7 @@ export default function Marketplace() {
                                     </div>
                                 )}
                                 <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-md px-2 py-1 rounded-md text-sm font-bold border border-white/10">
-                                    ${model.price}
+                                    {model.price === 0 ? t.product.free : `$${model.price}`}
                                 </div>
                             </div>
 

@@ -3,10 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Mail, Lock, User, Globe, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Register() {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { t } = useLanguage();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -67,7 +69,7 @@ export default function Register() {
     return (
         <div className="max-w-md mx-auto py-12">
             <div className="bg-surface border border-white/10 rounded-2xl p-8 shadow-xl">
-                <h2 className="text-3xl font-bold mb-6 text-center">Create Account</h2>
+                <h2 className="text-3xl font-bold mb-6 text-center">{t.auth.signup}</h2>
 
                 {error && (
                     <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-4 rounded-lg mb-6 flex items-center space-x-2">
@@ -78,7 +80,7 @@ export default function Register() {
 
                 <form onSubmit={handleRegister} className="space-y-4">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Full Name</label>
+                        <label className="text-sm font-medium text-gray-300">{t.auth.name}</label>
                         <div className="relative">
                             <User className="absolute left-3 top-2.5 text-gray-500" size={20} />
                             <input
@@ -93,7 +95,7 @@ export default function Register() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Email Address</label>
+                        <label className="text-sm font-medium text-gray-300">{t.auth.email}</label>
                         <div className="relative">
                             <Mail className="absolute left-3 top-2.5 text-gray-500" size={20} />
                             <input
@@ -127,38 +129,9 @@ export default function Register() {
                         <p className="text-xs text-gray-500">Determines payment methods available.</p>
                     </div>
 
-                    {/* Role selection removed as requested 
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">I want to...</label>
-                        <div className="grid grid-cols-2 gap-4">
-                            <button
-                                type="button"
-                                onClick={() => setRole('buyer')}
-                                className={`p-4 rounded-xl border transition-all ${
-                                    role === 'buyer'
-                                        ? 'bg-primary/20 border-primary text-primary shadow-[0_0_15px_rgba(139,92,246,0.3)]'
-                                        : 'bg-black/50 border-white/10 text-gray-400 hover:border-white/30'
-                                }`}
-                            >
-                                <span className="font-bold">Buy Models</span>
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => setRole('creator')}
-                                className={`p-4 rounded-xl border transition-all ${
-                                    role === 'creator'
-                                        ? 'bg-primary/20 border-primary text-primary shadow-[0_0_15px_rgba(139,92,246,0.3)]'
-                                        : 'bg-black/50 border-white/10 text-gray-400 hover:border-white/30'
-                                }`}
-                            >
-                                <span className="font-bold">Sell Models</span>
-                            </button>
-                        </div>
-                    </div>
-                    */}
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Password</label>
+                        <label className="text-sm font-medium text-gray-300">{t.auth.password}</label>
                         <div className="relative">
                             <Lock className="absolute left-3 top-2.5 text-gray-500" size={20} />
                             <input
@@ -178,14 +151,14 @@ export default function Register() {
                         disabled={loading}
                         className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-2"
                     >
-                        {loading ? 'Creating Account...' : 'Create Account'}
+                        {loading ? '...' : t.auth.signup}
                     </button>
                 </form>
 
                 <p className="mt-6 text-center text-gray-400">
-                    Already have an account?{' '}
+                    {t.auth.has_account}{' '}
                     <Link to="/login" className="text-primary hover:text-primary/80 font-medium">
-                        Sign In
+                        {t.auth.signin}
                     </Link>
                 </p>
             </div>
