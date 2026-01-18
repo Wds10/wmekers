@@ -92,13 +92,6 @@ export default function ProductDetail() {
             const sellerEarnings = model.price - platformFee;
 
             {
-                const waNumber = '5491134818977';
-                const message = `Hola! Ya pagué por el modelo: ${model.title}. Soy ${user?.email || 'N/A'}. Espero confirmación.`;
-                const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
-
-                // Open WhatsApp in new tab
-                window.open(waUrl, '_blank');
-
                 const { error } = await supabase.from('transactions').insert({
                     buyer_id: user?.id,
                     model_id: model.id,
@@ -114,7 +107,14 @@ export default function ProductDetail() {
 
                 setIsPending(true); // Update UI to Pending
                 setShowPaymentModal(false);
-                alert("Please complete the message on WhatsApp. Once Admin approves, you can download.");
+
+                // Open WhatsApp AFTER successful database insert
+                const waNumber = '5491134818977';
+                const message = `Hola! Ya pagué por el modelo: ${model.title}. Soy ${user?.email || 'N/A'}. Espero confirmación.`;
+                const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+                window.open(waUrl, '_blank');
+
+                alert("Purchase registered! Redirecting to WhatsApp to complete payment.");
             }
         } catch (err: any) {
             alert("Payment failed: " + err.message);
