@@ -60,7 +60,7 @@ export default function Admin() {
                 return;
             }
 
-            const modelExt = modelFile.name.split('.').pop();
+            // const modelExt = modelFile.name.split('.').pop();
             const modelPath = `uploads/${Date.now()}_${modelFile.name.replace(/\s/g, '_')}`;
             const previewPath = `uploads/${Date.now()}_preview_${previewFile.name.replace(/\s/g, '_')}`;
 

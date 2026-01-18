@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -93,14 +93,14 @@ export default function ProductDetail() {
 
             {
                 const waNumber = '5491134818977';
-                const message = `Hola! Ya pagué por el modelo: ${model.title}. Soy ${user.email}. Espero confirmación.`;
+                const message = `Hola! Ya pagué por el modelo: ${model.title}. Soy ${user?.email || 'N/A'}. Espero confirmación.`;
                 const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
 
                 // Open WhatsApp in new tab
                 window.open(waUrl, '_blank');
 
                 const { error } = await supabase.from('transactions').insert({
-                    buyer_id: user.id,
+                    buyer_id: user?.id,
                     model_id: model.id,
                     amount: model.price,
                     platform_fee: platformFee,
