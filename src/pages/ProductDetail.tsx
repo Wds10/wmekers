@@ -168,7 +168,7 @@ export default function ProductDetail() {
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="h-[500px] lg:h-[600px] sticky top-24">
+            <div className="h-[350px] lg:h-[600px] sticky top-24">
                 {signedUrl ? (
                     <ThreeViewer url={signedUrl} filename={model.file_path} />
                 ) : (

@@ -34,7 +34,21 @@ type Translations = {
             secure: string;
             owned: string;
             created_by: string;
-        }
+        };
+        home: {
+            hero_badge: string;
+            hero_title_1: string;
+            hero_title_2: string;
+            hero_desc: string;
+            btn_explore: string;
+            btn_creator: string;
+            feat_quality_title: string;
+            feat_quality_desc: string;
+            feat_secure_title: string;
+            feat_secure_desc: string;
+            feat_instant_title: string;
+            feat_instant_desc: string;
+        };
     }
 };
 
@@ -70,6 +84,20 @@ const translations: Translations = {
             secure: 'Compra Segura',
             owned: 'Ya tienes este modelo',
             created_by: 'Creado por'
+        },
+        home: {
+            hero_badge: 'El Mercado #1 de Activos 3D',
+            hero_title_1: 'Descubre y Vende',
+            hero_title_2: 'Modelos 3D Premium',
+            hero_desc: 'Únete a la comunidad de creadores. Compra y vende archivos STL, OBJ y FBX de alta calidad.',
+            btn_explore: 'Explorar Mercado',
+            btn_creator: 'Ser Creador',
+            feat_quality_title: 'Activos de Alta Calidad',
+            feat_quality_desc: 'Colección curada de modelos 3D listos para producción e impresión.',
+            feat_secure_title: 'Transacciones Seguras',
+            feat_secure_desc: 'Pagos seguros vía PayPal y Mercado Pago (Argentina).',
+            feat_instant_title: 'Descargas Instantáneas',
+            feat_instant_desc: 'Acceso inmediato a tus archivos con enlaces seguros y permanentes.'
         }
     },
     en: {
@@ -103,6 +131,20 @@ const translations: Translations = {
             secure: 'Secure Transaction',
             owned: 'You own this model',
             created_by: 'Created by'
+        },
+        home: {
+            hero_badge: 'The #1 Marketplace for 3D Assets',
+            hero_title_1: 'Discover & Sell',
+            hero_title_2: 'Premium 3D Models',
+            hero_desc: 'Join the community of creators. Buy and sell high-quality STL, OBJ, and FBX files for printing, gaming, and visualization.',
+            btn_explore: 'Explore Marketplace',
+            btn_creator: 'Become a Creator',
+            feat_quality_title: 'High Quality Assets',
+            feat_quality_desc: 'Curated collection of 3D models ready for production, printing, or rendering.',
+            feat_secure_title: 'Secure Transactions',
+            feat_secure_desc: 'Safe payments via PayPal and Mercado Pago depending on your location.',
+            feat_instant_title: 'Instant Downloads',
+            feat_instant_desc: 'Get immediate access to your purchased files with secure, permanent download links.'
         }
     }
 };
