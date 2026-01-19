@@ -69,47 +69,56 @@ export default function ProductDetail() {
             const status = searchParams.get('payment_status');
             const paymentId = searchParams.get('payment_id');
             const merchantOrder = searchParams.get('merchant_order_id');
+            const externalRef = searchParams.get('external_reference'); // Useful if we pass it back
 
-            // CASE 1: Payment Approved BUT Session Lost (Mobile Redirect Issue)
-            if (status === 'approved' && !user && !loading) {
-                // We cannot record transaction without user ID, so we MUST ask for login
-                // We will handle this in the render part
-                return;
-            }
-
-            // CASE 2: Payment Approved AND User Exists
-            if (status === 'approved' && user && model && !hasPurchased) {
+            if (status === 'approved' && !hasPurchased) {
+                // SERVER-SIDE VERIFICATION STRATEGY
+                // We call our API to verify payment and record transaction SECURELY.
+                // This works even if the user session is lost on mobile.
                 try {
-                    // Record transaction in DB if not exists
-                    const { error } = await supabase.from('transactions').insert({
-                        buyer_id: user.id,
-                        model_id: model.id,
-                        amount: model.price,
-                        platform_fee: model.price * 0.1,
-                        seller_earnings: model.price * 0.9,
-                        payment_method: 'mercadopago',
-                        status: 'completed',
-                        payment_id: paymentId || merchantOrder || 'unknown_mp_id'
+                    console.log("Verifying payment server-side...", paymentId);
+
+                    const response = await fetch('/api/verify-payment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            paymentId: paymentId || merchantOrder,
+                            modelId: model?.id
+                        })
                     });
 
-                    if (error && error.code !== '23505') {
-                        console.error("Error DB: " + error.message);
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        console.log("Payment Verified Server-Side!", result);
+                        setHasPurchased(true);
+
+                        // If the API returns a signed URL directly, use it!
+                        if (result.signedUrl) {
+                            setSignedUrl(result.signedUrl);
+                            setTimeout(() => {
+                                handleDownload(result.signedUrl);
+                            }, 1000);
+                        } else {
+                            // Fallback
+                            setTimeout(handleDownload, 1000);
+                        }
+                    } else {
+                        console.error("Verification Failed:", result);
+                        // If verification fails but status is approved, it might be already recorded or session issue.
+                        // But since we just implemented the API, we trust the API result.
+                        // Only show error if strictly needed.
                     }
 
-                    if (!error || error.code === '23505') {
-                        // Trust the URL for immediate feedback
-                        setHasPurchased(true);
-                        setTimeout(() => {
-                            handleDownload();
-                        }, 1000);
-                    }
-                } catch (e: any) {
-                    console.error("Auto-record error:", e);
+                } catch (e) {
+                    console.error("Verification API Error:", e);
                 }
             }
         };
 
-        checkPaymentAndDownload();
+        if (model) {
+            checkPaymentAndDownload();
+        }
 
         return () => {
             supabase.removeChannel(channel);
@@ -169,7 +178,8 @@ export default function ProductDetail() {
                     title: model.title,
                     unit_price: model.price * ARS_RATE,
                     quantity: 1,
-                    productId: model.id
+                    productId: model.id,
+                    userId: user.id // Send User ID to link payment
                 })
             });
             const data = await response.json();
@@ -208,10 +218,12 @@ export default function ProductDetail() {
         });
     };
 
-    const handleDownload = async () => {
-        if (signedUrl) {
+    const handleDownload = async (overriddenUrl?: string) => {
+        const targetUrl = overriddenUrl || signedUrl;
+
+        if (targetUrl) {
             const a = document.createElement('a');
-            a.href = signedUrl;
+            a.href = targetUrl;
             a.download = model.file_path.split('/').pop() || 'model.stl';
             document.body.appendChild(a);
             a.click();
@@ -238,31 +250,8 @@ export default function ProductDetail() {
     if (loading) return <div className="flex justify-center items-center h-96"><Loader2 className="animate-spin text-primary" size={48} /></div>;
     if (!model) return <div className="text-center p-12 text-xl">Model not found</div>;
 
-    // SESSION RECOVERY VIEW (Mobile Redirect Fix)
-    const isPaymentApproved = searchParams.get('payment_status') === 'approved';
-    if (isPaymentApproved && !user) {
-        return (
-            <div className="max-w-lg mx-auto py-12 px-4 text-center animate-fade-in">
-                <div className="bg-surface border border-yellow-500/30 rounded-3xl p-8 shadow-2xl">
-                    <div className="mx-auto w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mb-6">
-                        <UserIcon className="w-8 h-8 text-yellow-500" />
-                    </div>
-                    <h1 className="text-2xl font-bold text-white mb-2">Pago Detectado / Payment Detected</h1>
-                    <p className="text-gray-300 mb-6">
-                        {t.payment?.verifying || "Por favor inicia sesión para vincular tu compra y descargar el archivo."}
-                        <br />
-                        <span className="text-sm text-gray-500">(La sesión pudo cerrarse durante la redirección)</span>
-                    </p>
-                    <a
-                        href="/login"
-                        className="block w-full py-4 bg-primary text-black font-bold text-lg rounded-xl hover:bg-primary/90 transition-colors"
-                    >
-                        Iniciar Sesión / Log In
-                    </a>
-                </div>
-            </div>
-        );
-    }
+    // RECOVERY VIEW REMOVED - Backend handles verification now.
+
 
     // SUCCESS VIEW - Mobile Safe (No 3D Viewer, No Complex Grid)
     if (hasPurchased) {
@@ -284,7 +273,7 @@ export default function ProductDetail() {
 
                         <div className="py-6">
                             <button
-                                onClick={handleDownload}
+                                onClick={() => handleDownload()} // Fixed: Arrow function prevents event passing
                                 className="w-full py-5 bg-green-500 hover:bg-green-600 active:scale-95 text-white font-bold text-xl rounded-xl shadow-xl hover:shadow-green-500/25 transition-all flex items-center justify-center gap-3 animate-pulse"
                             >
                                 <Download size={28} />

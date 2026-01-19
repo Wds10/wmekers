@@ -12,7 +12,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN || 'APP_USR-1475830055280005-011911-d4bfff78665633e9390cd436ac703888-228386560';
 
         const client = new MercadoPagoConfig({ accessToken: ACCESS_TOKEN });
-        const { title, unit_price, quantity, productId } = req.body;
+        const { title, unit_price, quantity, productId, userId } = req.body;
 
         const preference = new Preference(client);
         const result = await preference.create({
@@ -26,12 +26,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                         currency_id: 'ARS',
                     },
                 ],
+                external_reference: userId, // Link payment to user
                 back_urls: {
-                    success: `${req.headers.origin}/product/${productId}?payment_status=approved`,
+                    success: `${req.headers.origin}/product/${productId}?payment_status=approved&user_ref=${userId}`,
                     failure: `${req.headers.origin}/product/${productId}?payment_status=failure`,
                     pending: `${req.headers.origin}/product/${productId}?payment_status=pending`,
                 },
                 auto_return: 'approved',
+                metadata: {
+                    user_id: userId,
+                    product_id: productId
+                }
             },
         });
 
