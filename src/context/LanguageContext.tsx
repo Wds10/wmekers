@@ -34,6 +34,7 @@ type Translations = {
             secure: string;
             owned: string;
             created_by: string;
+            download_ready: string;
         };
         home: {
             hero_badge: string;
@@ -95,7 +96,8 @@ const translations: Translations = {
             download: 'Descargar Archivo',
             secure: 'Compra Segura',
             owned: 'Ya tienes este modelo',
-            created_by: 'Creado por'
+            created_by: 'Creado por',
+            download_ready: 'Tu archivo está listo para descargar.'
         },
         home: {
             hero_badge: 'El Mercado #1 de Activos 3D',
@@ -154,7 +156,8 @@ const translations: Translations = {
             download: 'Download File',
             secure: 'Secure Transaction',
             owned: 'You own this model',
-            created_by: 'Created by'
+            created_by: 'Created by',
+            download_ready: 'Your file is ready to download.'
         },
         home: {
             hero_badge: 'The #1 Marketplace for 3D Assets',

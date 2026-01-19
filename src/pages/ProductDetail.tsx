@@ -57,9 +57,9 @@ export default function ProductDetail() {
                         }, 1000);
 
                         // Clean URL after delay to avoid re-triggering on refresh
-                        setTimeout(() => {
-                            window.history.replaceState({}, '', window.location.pathname);
-                        }, 5000);
+                        // setTimeout(() => {
+                        //     window.history.replaceState({}, '', window.location.pathname);
+                        // }, 5000);
                     }
                 }
             )
@@ -98,9 +98,9 @@ export default function ProductDetail() {
                         }, 1000);
 
                         // Clean URL after delay
-                        setTimeout(() => {
-                            window.history.replaceState({}, '', window.location.pathname);
-                        }, 2000);
+                        // setTimeout(() => {
+                        //     window.history.replaceState({}, '', window.location.pathname);
+                        // }, 2000);
                     }
                 } catch (e: any) {
                     console.error("Auto-record error:", e);
@@ -237,6 +237,44 @@ export default function ProductDetail() {
     if (loading) return <div className="flex justify-center items-center h-96"><Loader2 className="animate-spin text-primary" size={48} /></div>;
     if (!model) return <div className="text-center p-12 text-xl">Model not found</div>;
 
+    // SUCCESS VIEW - Mobile Safe (No 3D Viewer, No Complex Grid)
+    if (hasPurchased) {
+        return (
+            <div className="max-w-lg mx-auto py-12 px-4 text-center animate-fade-in">
+                <div className="bg-surface border border-green-500/30 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+                    {/* Background Bloom */}
+                    <div className="absolute top-0 left-0 w-full h-full bg-green-500/5 z-0"></div>
+
+                    <div className="relative z-10 space-y-6">
+                        <div className="mx-auto w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mb-6 ring-4 ring-green-500/10">
+                            <Download className="w-10 h-10 text-green-400" />
+                        </div>
+
+                        <div className="space-y-2">
+                            <h1 className="text-3xl font-bold text-white">{t.payment.success}</h1>
+                            <p className="text-gray-400">{t.product.download_ready || "Tu archivo está listo para descargar."}</p>
+                        </div>
+
+                        <div className="py-6">
+                            <button
+                                onClick={handleDownload}
+                                className="w-full py-5 bg-green-500 hover:bg-green-600 active:scale-95 text-white font-bold text-xl rounded-xl shadow-xl hover:shadow-green-500/25 transition-all flex items-center justify-center gap-3 animate-pulse"
+                            >
+                                <Download size={28} />
+                                <span>{t.product.download}</span>
+                            </button>
+                        </div>
+
+                        <div className="text-sm text-gray-500 pt-4 border-t border-white/10">
+                            <p>ID de Transacción: {searchParams.get('payment_id') || 'Registrado'}</p>
+                            <a href="/" className="text-primary hover:underline mt-2 inline-block">Volver a la tienda</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     const isArgentina = profile?.country === 'Argentina';
 
     return (
@@ -273,29 +311,14 @@ export default function ProductDetail() {
                         <span className="text-xs font-mono px-2 py-1 bg-white/5 rounded border border-white/10">{model.license} {t.product.license}</span>
                     </div>
 
-                    {/* ACTION BUTTONS - SIMPLIFIED LOGIC */}
-                    {hasPurchased ? (
-                        <div className="mb-4 space-y-4 animate-fade-in">
-                            <div className="p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-400 text-center font-bold">
-                                {t.payment.success}
-                            </div>
-                            <button
-                                onClick={handleDownload}
-                                className="w-full py-4 bg-green-500 text-white font-bold text-lg rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center space-x-2 shadow-lg animate-pulse"
-                            >
-                                <Download size={24} />
-                                <span>{t.product.download}</span>
-                            </button>
-                        </div>
-                    ) : (
-                        <button
-                            onClick={() => setShowPaymentModal(true)}
-                            className="w-full py-4 bg-white text-black font-bold text-lg rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
-                        >
-                            <ShoppingCart size={20} />
-                            <span>{t.product.pay}</span>
-                        </button>
-                    )}
+                    {/* Pay Button */}
+                    <button
+                        onClick={() => setShowPaymentModal(true)}
+                        className="w-full py-4 bg-white text-black font-bold text-lg rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
+                    >
+                        <ShoppingCart size={20} />
+                        <span>{t.product.pay}</span>
+                    </button>
                 </div>
 
                 <div className="space-y-4">
