@@ -29,7 +29,16 @@ export default function ProductDetail() {
     const [creatingPreference, setCreatingPreference] = useState(false);
 
     useEffect(() => {
-        if (id) fetchModel(id);
+        if (id) {
+            // Restore from LocalStorage if available (Fix for reload/lost session)
+            const cachedUrl = localStorage.getItem(`purchased_${id}`);
+            if (cachedUrl) {
+                console.log("Restored purchase from cache");
+                setSignedUrl(cachedUrl);
+                setHasPurchased(true);
+            }
+            fetchModel(id);
+        }
     }, [id, user]);
 
     useEffect(() => {
@@ -95,6 +104,12 @@ export default function ProductDetail() {
                         // If the API returns a signed URL directly, use it!
                         if (result.signedUrl) {
                             setSignedUrl(result.signedUrl);
+
+                            // PERSISTENCE: Save to LocalStorage
+                            if (model?.id) {
+                                localStorage.setItem(`purchased_${model.id}`, result.signedUrl);
+                            }
+
                             setTimeout(() => {
                                 handleDownload(result.signedUrl);
                             }, 1000);
