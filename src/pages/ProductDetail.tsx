@@ -54,10 +54,16 @@ export default function ProductDetail() {
 
                     if (!error || error.code === '23505') { // Ignore duplicate key error
                         setHasPurchased(true);
-                        // Auto Download
-                        handleDownload();
-                        // Clean URL
-                        window.history.replaceState({}, '', window.location.pathname);
+                        // Auto Download with delay to ensure state update and browser readiness
+                        setTimeout(() => {
+                            handleDownload();
+                        }, 1000);
+
+                        // Clean URL after delay
+                        setTimeout(() => {
+                            window.history.replaceState({}, '', window.location.pathname);
+                        }, 2000);
+
                         alert(t.payment.success);
                     }
                 } catch (e) {
