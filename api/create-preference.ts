@@ -36,6 +36,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         res.status(200).json({ id: result.id });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Error creating preference' });
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        res.status(500).json({ error: errorMessage, details: error });
     }
 }

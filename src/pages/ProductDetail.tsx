@@ -98,7 +98,7 @@ export default function ProductDetail() {
             });
             const data = await response.json();
             if (data.id) setPreferenceId(data.id);
-            else alert(t.payment.error_preference);
+            else alert(t.payment.error_preference + ": " + (data.error || JSON.stringify(data)));
         } catch (e) {
             console.error(e);
             alert(t.payment.error_preference);
