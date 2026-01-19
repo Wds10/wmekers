@@ -233,8 +233,9 @@ export default function ProductDetail() {
 
     const [showPaymentModal, setShowPaymentModal] = useState(false);
 
+    // Safe Render: Ensure model exists before accessing properties
     if (loading) return <div className="flex justify-center items-center h-96"><Loader2 className="animate-spin text-primary" size={48} /></div>;
-    if (!model) return <div>Model not found</div>;
+    if (!model) return <div className="text-center p-12 text-xl">Model not found</div>;
 
     const isArgentina = profile?.country === 'Argentina';
 
@@ -255,10 +256,10 @@ export default function ProductDetail() {
             {/* Info Section */}
             <div className="space-y-8">
                 <div>
-                    <h1 className="text-4xl font-bold mb-2">{model.title}</h1>
+                    <h1 className="text-4xl font-bold mb-2">{model.title || 'Untitled Model'}</h1>
                     <div className="flex items-center space-x-2 text-gray-400">
                         <UserIcon size={16} />
-                        <span>{t.product.created_by} <span className="text-white font-medium">{model.profiles?.full_name}</span></span>
+                        <span>{t.product.created_by} <span className="text-white font-medium">{model.profiles?.full_name || 'Unknown'}</span></span>
                     </div>
                 </div>
 
@@ -272,10 +273,9 @@ export default function ProductDetail() {
                         <span className="text-xs font-mono px-2 py-1 bg-white/5 rounded border border-white/10">{model.license} {t.product.license}</span>
                     </div>
 
-
-
-                    {hasPurchased && (
-                        <div className="mb-4 space-y-4">
+                    {/* ACTION BUTTONS - SIMPLIFIED LOGIC */}
+                    {hasPurchased ? (
+                        <div className="mb-4 space-y-4 animate-fade-in">
                             <div className="p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-400 text-center font-bold">
                                 {t.payment.success}
                             </div>
@@ -287,9 +287,7 @@ export default function ProductDetail() {
                                 <span>{t.product.download}</span>
                             </button>
                         </div>
-                    )}
-
-                    {!hasPurchased && (
+                    ) : (
                         <button
                             onClick={() => setShowPaymentModal(true)}
                             className="w-full py-4 bg-white text-black font-bold text-lg rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
@@ -302,7 +300,7 @@ export default function ProductDetail() {
 
                 <div className="space-y-4">
                     <h3 className="text-xl font-bold">Description</h3>
-                    <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{model.description}</p>
+                    <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{model.description || 'No description available.'}</p>
                 </div>
 
                 {/* Payment Modal */}
@@ -325,7 +323,7 @@ export default function ProductDetail() {
                                     <span className="font-mono text-white bg-black/30 px-2 py-1 rounded">ARS</span>
                                 </div>
                                 <p className="text-white text-2xl font-bold mb-4">
-                                    ${Math.round(model.price * ARS_RATE).toLocaleString('es-AR')}
+                                    ${Number(model.price * ARS_RATE).toLocaleString('es-AR')}
                                 </p>
                                 {!preferenceId ? (
                                     <button
@@ -348,9 +346,6 @@ export default function ProductDetail() {
                                 </p>
                             </div>
 
-
-
-
                             <div className="border-t border-white/10 my-6"></div>
 
                             {/* PayPal Option */}
@@ -366,7 +361,6 @@ export default function ProductDetail() {
                                     <PayPalScriptProvider options={{ clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || "test", currency: "USD" }}>
                                         <PayPalButtons
                                             style={{ layout: "vertical", color: "blue", shape: "rect", label: "pay" }}
-                                            // Fix PayPal createOrder
                                             createOrder={(_data, actions) => {
                                                 return actions.order.create({
                                                     intent: "CAPTURE",
