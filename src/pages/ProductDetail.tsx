@@ -51,8 +51,15 @@ export default function ProductDetail() {
                         (payload.new.status === 'completed' || payload.new.status === 'approved')
                     ) {
                         setHasPurchased(true);
-                        alert(t.payment.success);
-                        handleDownload();
+                        // Auto Download with delay
+                        setTimeout(() => {
+                            handleDownload();
+                        }, 1000);
+
+                        // Clean URL after delay to avoid re-triggering on refresh
+                        setTimeout(() => {
+                            window.history.replaceState({}, '', window.location.pathname);
+                        }, 5000);
                     }
                 }
             )
@@ -264,6 +271,14 @@ export default function ProductDetail() {
                         </span>
                         <span className="text-xs font-mono px-2 py-1 bg-white/5 rounded border border-white/10">{model.license} {t.product.license}</span>
                     </div>
+
+
+                    {hasPurchased && (
+                        <div className="mb-4 p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-400 text-center font-bold">
+                            {t.payment.success} <br />
+                            <span className="text-sm font-normal text-green-300">Descarga tu archivo aquí abajo 👇</span>
+                        </div>
+                    )}
 
                     {!hasPurchased ? (
                         <button

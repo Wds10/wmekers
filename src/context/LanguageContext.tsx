@@ -92,7 +92,7 @@ const translations: Translations = {
             pay: 'Pagar',
             processing: 'Procesando...',
             verifying: 'Verificando...',
-            download: 'Descargar',
+            download: 'Descargar Archivo',
             secure: 'Compra Segura',
             owned: 'Ya tienes este modelo',
             created_by: 'Creado por'
@@ -151,7 +151,7 @@ const translations: Translations = {
             pay: 'Pay',
             processing: 'Processing...',
             verifying: 'Verifying...',
-            download: 'Download',
+            download: 'Download File',
             secure: 'Secure Transaction',
             owned: 'You own this model',
             created_by: 'Created by'
