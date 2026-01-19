@@ -37,7 +37,8 @@ export default function Register() {
                 options: {
                     data: {
                         full_name: formData.fullName,
-                    }
+                    },
+                    emailRedirectTo: window.location.origin
                 }
             });
 
