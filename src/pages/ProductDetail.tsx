@@ -33,11 +33,41 @@ export default function ProductDetail() {
     }, [id, user]);
 
     useEffect(() => {
-        const status = searchParams.get('payment_status');
-        if (status === 'approved') {
-            setHasPurchased(true);
-        }
-    }, [searchParams]);
+        const checkPaymentAndDownload = async () => {
+            const status = searchParams.get('payment_status');
+            const paymentId = searchParams.get('payment_id');
+            const merchantOrder = searchParams.get('merchant_order_id');
+
+            if (status === 'approved' && user && model && !hasPurchased) {
+                try {
+                    // Record transaction in DB if not exists
+                    const { error } = await supabase.from('transactions').insert({
+                        buyer_id: user.id,
+                        model_id: model.id,
+                        amount: model.price,
+                        platform_fee: model.price * 0.1,
+                        seller_earnings: model.price * 0.9,
+                        payment_method: 'mercadopago',
+                        status: 'completed',
+                        payment_id: paymentId || merchantOrder || 'unknown_mp_id'
+                    });
+
+                    if (!error || error.code === '23505') { // Ignore duplicate key error
+                        setHasPurchased(true);
+                        // Auto Download
+                        handleDownload();
+                        // Clean URL
+                        window.history.replaceState({}, '', window.location.pathname);
+                        alert(t.payment.success);
+                    }
+                } catch (e) {
+                    console.error("Auto-record error:", e);
+                }
+            }
+        };
+
+        checkPaymentAndDownload();
+    }, [searchParams, user, model, hasPurchased]);
 
     const fetchModel = async (modelId: string) => {
         try {
