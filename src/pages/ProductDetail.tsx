@@ -6,11 +6,10 @@ import { useLanguage } from '../context/LanguageContext';
 import ThreeViewer from '../components/ThreeViewer';
 import { ShoppingCart, Download, User as UserIcon, ShoppingBag, Loader2 } from 'lucide-react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 
 // Initialize MP
-const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY || 'TEST-00000000-0000-0000-0000-000000000000';
-initMercadoPago(MP_PUBLIC_KEY, { locale: 'es-AR' });
+// const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY || 'TEST-00000000-0000-0000-0000-000000000000';
+// initMercadoPago(MP_PUBLIC_KEY, { locale: 'es-AR' });
 
 const ARS_RATE = 1200;
 
@@ -97,7 +96,13 @@ export default function ProductDetail() {
                 })
             });
             const data = await response.json();
-            if (data.id) setPreferenceId(data.id);
+            if (data.init_point) {
+                setPreferenceId(data.init_point); // Reuse state
+                window.location.href = data.init_point; // Auto redirect
+            } else if (data.id) {
+                // Fallback if only ID returned (shouldn't happen with new api)
+                setPreferenceId(data.id);
+            }
             else alert(t.payment.error_preference + ": " + (data.error || JSON.stringify(data)));
         } catch (e) {
             console.error(e);
@@ -236,7 +241,14 @@ export default function ProductDetail() {
                                         {creatingPreference ? <Loader2 className="animate-spin" /> : t.payment.pay_mp}
                                     </button>
                                 ) : (
-                                    <Wallet initialization={{ preferenceId: preferenceId }} />
+                                    <a
+                                        href={preferenceId} // We store init_point in preferenceId state for simplicity or need a new state? 
+                                        // Wait, setPreferenceId was used for ID. I should verify what I set.
+                                        // I'll update the fetch handler first.
+                                        className="w-full py-3 bg-[#009EE3] hover:bg-[#008ED0] text-white font-bold rounded-lg transition-colors flex justify-center items-center shadow-lg text-center"
+                                    >
+                                        Pagar ahora en Mercado Pago
+                                    </a>
                                 )}
                             </div>
 

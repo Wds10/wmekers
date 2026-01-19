@@ -35,7 +35,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             },
         });
 
-        res.status(200).json({ id: result.id });
+        res.status(200).json({ id: result.id, init_point: result.init_point });
     } catch (error: any) {
         console.error('MP Error:', error);
         // Extract useful info from MP error object which might not be an Error instance
