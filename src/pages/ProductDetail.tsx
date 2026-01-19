@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import ThreeViewer from '../components/ThreeViewer';
-import { ShoppingCart, Download, User as UserIcon, Shield, ShoppingBag, Loader2 } from 'lucide-react';
+import { ShoppingCart, Download, User as UserIcon, ShoppingBag, Loader2 } from 'lucide-react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 
@@ -23,7 +23,7 @@ export default function ProductDetail() {
     const [loading, setLoading] = useState(true);
     const [signedUrl, setSignedUrl] = useState<string | null>(null);
     const [hasPurchased, setHasPurchased] = useState(false);
-    const [isPending, setIsPending] = useState(false);
+    // const [isPending, setIsPending] = useState(false);
 
     // MP State
     const [preferenceId, setPreferenceId] = useState<string | null>(null);
@@ -107,7 +107,7 @@ export default function ProductDetail() {
         }
     };
 
-    const handlePayPalApprove = async (data: any, actions: any) => {
+    const handlePayPalApprove = async (_data: any, actions: any) => {
         return actions.order.capture().then(async (details: any) => {
             const { error } = await supabase.from('transactions').insert({
                 buyer_id: user?.id,
@@ -236,7 +236,7 @@ export default function ProductDetail() {
                                         {creatingPreference ? <Loader2 className="animate-spin" /> : t.payment.pay_mp}
                                     </button>
                                 ) : (
-                                    <Wallet initialization={{ preferenceId: preferenceId }} customization={{ texts: { valueProp: 'smart_option' } }} />
+                                    <Wallet initialization={{ preferenceId: preferenceId }} />
                                 )}
                             </div>
 
@@ -255,10 +255,15 @@ export default function ProductDetail() {
                                     <PayPalScriptProvider options={{ clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || "test", currency: "USD" }}>
                                         <PayPalButtons
                                             style={{ layout: "vertical", color: "blue", shape: "rect", label: "pay" }}
-                                            createOrder={(data, actions) => {
+                                            // Fix PayPal createOrder
+                                            createOrder={(_data, actions) => {
                                                 return actions.order.create({
+                                                    intent: "CAPTURE",
                                                     purchase_units: [{
-                                                        amount: { value: model.price.toString() }
+                                                        amount: {
+                                                            value: model.price.toString(),
+                                                            currency_code: 'USD'
+                                                        }
                                                     }]
                                                 });
                                             }}
