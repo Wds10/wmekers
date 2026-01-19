@@ -57,6 +57,9 @@ type Translations = {
             loading: string;
             error_preference: string;
             success: string;
+            transfer_title: string;
+            transfer_btn: string;
+            transfer_note: string;
         };
     }
 };
@@ -115,7 +118,10 @@ const translations: Translations = {
             pay_paypal: 'Pagar con PayPal',
             loading: 'Procesando...',
             error_preference: 'Error al generar link de pago',
-            success: '¡Pago Exitoso!'
+            success: '¡Pago Exitoso!',
+            transfer_title: 'Transferencia Directa (Sin Comisión)',
+            transfer_btn: 'Notificar y Enviar Comprobante',
+            transfer_note: '* La descarga se habilitará manualmente tras verificar el pago.'
         }
     },
     en: {
@@ -171,7 +177,10 @@ const translations: Translations = {
             pay_paypal: 'Pay with PayPal',
             loading: 'Processing...',
             error_preference: 'Error generating payment link',
-            success: 'Payment Successful!'
+            success: 'Payment Successful!',
+            transfer_title: 'Direct Transfer (No Fees)',
+            transfer_btn: 'Notify & Send Receipt',
+            transfer_note: '* Download will be enabled manually after verification.'
         }
     }
 };
