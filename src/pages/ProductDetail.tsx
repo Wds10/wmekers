@@ -70,9 +70,16 @@ export default function ProductDetail() {
             const paymentId = searchParams.get('payment_id');
             const merchantOrder = searchParams.get('merchant_order_id');
 
+            // CASE 1: Payment Approved BUT Session Lost (Mobile Redirect Issue)
+            if (status === 'approved' && !user && !loading) {
+                // We cannot record transaction without user ID, so we MUST ask for login
+                // We will handle this in the render part
+                return;
+            }
+
+            // CASE 2: Payment Approved AND User Exists
             if (status === 'approved' && user && model && !hasPurchased) {
                 try {
-                    // alert("Procesando pago... ID: " + (paymentId || "no-id"));
                     // Record transaction in DB if not exists
                     const { error } = await supabase.from('transactions').insert({
                         buyer_id: user.id,
@@ -90,17 +97,11 @@ export default function ProductDetail() {
                     }
 
                     if (!error || error.code === '23505') {
+                        // Trust the URL for immediate feedback
                         setHasPurchased(true);
                         setTimeout(() => {
-                            // handleDownload(); // Let the user click download or realtime handle it to avoid duplicate
-                            // Actually, auto-download is requested.
                             handleDownload();
                         }, 1000);
-
-                        // Clean URL after delay
-                        // setTimeout(() => {
-                        //     window.history.replaceState({}, '', window.location.pathname);
-                        // }, 2000);
                     }
                 } catch (e: any) {
                     console.error("Auto-record error:", e);
@@ -236,6 +237,32 @@ export default function ProductDetail() {
     // Safe Render: Ensure model exists before accessing properties
     if (loading) return <div className="flex justify-center items-center h-96"><Loader2 className="animate-spin text-primary" size={48} /></div>;
     if (!model) return <div className="text-center p-12 text-xl">Model not found</div>;
+
+    // SESSION RECOVERY VIEW (Mobile Redirect Fix)
+    const isPaymentApproved = searchParams.get('payment_status') === 'approved';
+    if (isPaymentApproved && !user) {
+        return (
+            <div className="max-w-lg mx-auto py-12 px-4 text-center animate-fade-in">
+                <div className="bg-surface border border-yellow-500/30 rounded-3xl p-8 shadow-2xl">
+                    <div className="mx-auto w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mb-6">
+                        <UserIcon className="w-8 h-8 text-yellow-500" />
+                    </div>
+                    <h1 className="text-2xl font-bold text-white mb-2">Pago Detectado / Payment Detected</h1>
+                    <p className="text-gray-300 mb-6">
+                        {t.payment?.verifying || "Por favor inicia sesión para vincular tu compra y descargar el archivo."}
+                        <br />
+                        <span className="text-sm text-gray-500">(La sesión pudo cerrarse durante la redirección)</span>
+                    </p>
+                    <a
+                        href="/login"
+                        className="block w-full py-4 bg-primary text-black font-bold text-lg rounded-xl hover:bg-primary/90 transition-colors"
+                    >
+                        Iniciar Sesión / Log In
+                    </a>
+                </div>
+            </div>
+        );
+    }
 
     // SUCCESS VIEW - Mobile Safe (No 3D Viewer, No Complex Grid)
     if (hasPurchased) {
