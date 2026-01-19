@@ -61,6 +61,7 @@ type Translations = {
             transfer_title: string;
             transfer_btn: string;
             transfer_note: string;
+            verifying: string;
         };
     }
 };
@@ -123,7 +124,8 @@ const translations: Translations = {
             success: '¡Pago Exitoso!',
             transfer_title: 'Transferencia Directa (Sin Comisión)',
             transfer_btn: 'Notificar y Enviar Comprobante',
-            transfer_note: '* La descarga se habilitará manualmente tras verificar el pago.'
+            transfer_note: '* La descarga se habilitará manualmente tras verificar el pago.',
+            verifying: 'Verificando pago...'
         }
     },
     en: {
@@ -183,7 +185,8 @@ const translations: Translations = {
             success: 'Payment Successful!',
             transfer_title: 'Direct Transfer (No Fees)',
             transfer_btn: 'Notify & Send Receipt',
-            transfer_note: '* Download will be enabled manually after verification.'
+            transfer_note: '* Download will be enabled manually after verification.',
+            verifying: 'Verifying payment...'
         }
     }
 };
