@@ -49,6 +49,15 @@ type Translations = {
             feat_instant_title: string;
             feat_instant_desc: string;
         };
+        payment: {
+            title_arg: string;
+            title_intl: string;
+            pay_mp: string;
+            pay_paypal: string;
+            loading: string;
+            error_preference: string;
+            success: string;
+        };
     }
 };
 
@@ -98,6 +107,15 @@ const translations: Translations = {
             feat_secure_desc: 'Pagos seguros vía PayPal y Mercado Pago (Argentina).',
             feat_instant_title: 'Descargas Instantáneas',
             feat_instant_desc: 'Acceso inmediato a tus archivos con enlaces seguros y permanentes.'
+        },
+        payment: {
+            title_arg: 'Pago en Argentina (Mercado Pago)',
+            title_intl: 'Pago Internacional (PayPal)',
+            pay_mp: 'Pagar con Mercado Pago',
+            pay_paypal: 'Pagar con PayPal',
+            loading: 'Procesando...',
+            error_preference: 'Error al generar link de pago',
+            success: '¡Pago Exitoso!'
         }
     },
     en: {
@@ -145,6 +163,15 @@ const translations: Translations = {
             feat_secure_desc: 'Safe payments via PayPal and Mercado Pago depending on your location.',
             feat_instant_title: 'Instant Downloads',
             feat_instant_desc: 'Get immediate access to your purchased files with secure, permanent download links.'
+        },
+        payment: {
+            title_arg: 'Payment in Argentina (Mercado Pago)',
+            title_intl: 'International Payment (PayPal)',
+            pay_mp: 'Pay with Mercado Pago',
+            pay_paypal: 'Pay with PayPal',
+            loading: 'Processing...',
+            error_preference: 'Error generating payment link',
+            success: 'Payment Successful!'
         }
     }
 };
