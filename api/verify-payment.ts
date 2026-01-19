@@ -39,11 +39,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const paymentData = await payment.get({ id: paymentId });
 
         if (paymentData.status !== 'approved') {
-            return res.status(400).json({ error: 'Payment not approved', status: paymentData.status });
+            return res.status(400).json({
+                error: 'Payment not approved',
+                status: paymentData.status,
+                detail: paymentData.status_detail
+            });
         }
 
         // 2. Extract User ID from External Reference
-        const userId = paymentData.external_reference;
+        // Check both external_reference and metadata as fallback
+        const userId = paymentData.external_reference || (paymentData.metadata as any)?.user_id;
+
         if (!userId) {
             return res.status(400).json({ error: 'Payment missing user reference' });
         }

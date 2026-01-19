@@ -69,7 +69,6 @@ export default function ProductDetail() {
             const status = searchParams.get('payment_status');
             const paymentId = searchParams.get('payment_id');
             const merchantOrder = searchParams.get('merchant_order_id');
-            const externalRef = searchParams.get('external_reference'); // Useful if we pass it back
 
             if (status === 'approved' && !hasPurchased) {
                 // SERVER-SIDE VERIFICATION STRATEGY
