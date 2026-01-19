@@ -2,16 +2,19 @@
 import { MercadoPagoConfig, Preference } from 'mercadopago';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN! });
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { title, unit_price, quantity, productId } = req.body;
-
     try {
+        if (!process.env.MP_ACCESS_TOKEN) {
+            throw new Error('MP_ACCESS_TOKEN is missing in server environment');
+        }
+
+        const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
+        const { title, unit_price, quantity, productId } = req.body;
+
         const preference = new Preference(client);
         const result = await preference.create({
             body: {
@@ -34,9 +37,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
 
         res.status(200).json({ id: result.id });
-    } catch (error) {
-        console.error(error);
-        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        res.status(500).json({ error: errorMessage, details: error });
+    } catch (error: any) {
+        console.error('MP Error:', error);
+        // Extract useful info from MP error object which might not be an Error instance
+        const errorMsg = error.message || error.cause?.description || JSON.stringify(error, Object.getOwnPropertyNames(error));
+        res.status(500).json({ error: errorMsg, full_details: error });
     }
 }
