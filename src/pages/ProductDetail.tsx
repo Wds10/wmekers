@@ -40,6 +40,7 @@ export default function ProductDetail() {
 
             if (status === 'approved' && user && model && !hasPurchased) {
                 try {
+                    // alert("Debug: Procesando pago... " + (paymentId || "no-id"));
                     // Record transaction in DB if not exists
                     const { error } = await supabase.from('transactions').insert({
                         buyer_id: user.id,
@@ -51,6 +52,10 @@ export default function ProductDetail() {
                         status: 'completed',
                         payment_id: paymentId || merchantOrder || 'unknown_mp_id'
                     });
+
+                    if (error && error.code !== '23505') {
+                        alert("Error DB: " + error.message + " Code: " + error.code);
+                    }
 
                     if (!error || error.code === '23505') { // Ignore duplicate key error
                         setHasPurchased(true);
