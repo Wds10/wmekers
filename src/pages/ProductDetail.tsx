@@ -273,28 +273,29 @@ export default function ProductDetail() {
                     </div>
 
 
+
                     {hasPurchased && (
-                        <div className="mb-4 p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-400 text-center font-bold">
-                            {t.payment.success} <br />
-                            <span className="text-sm font-normal text-green-300">Descarga tu archivo aquí abajo 👇</span>
+                        <div className="mb-4 space-y-4">
+                            <div className="p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-400 text-center font-bold">
+                                {t.payment.success}
+                            </div>
+                            <button
+                                onClick={handleDownload}
+                                className="w-full py-4 bg-green-500 text-white font-bold text-lg rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center space-x-2 shadow-lg animate-pulse"
+                            >
+                                <Download size={24} />
+                                <span>{t.product.download}</span>
+                            </button>
                         </div>
                     )}
 
-                    {!hasPurchased ? (
+                    {!hasPurchased && (
                         <button
                             onClick={() => setShowPaymentModal(true)}
                             className="w-full py-4 bg-white text-black font-bold text-lg rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
                         >
                             <ShoppingCart size={20} />
                             <span>{t.product.pay}</span>
-                        </button>
-                    ) : (
-                        <button
-                            onClick={handleDownload}
-                            className="w-full py-4 bg-green-500 text-white font-bold text-lg rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center space-x-2"
-                        >
-                            <Download size={20} />
-                            <span>{t.product.download}</span>
                         </button>
                     )}
                 </div>
