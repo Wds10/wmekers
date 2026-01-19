@@ -12,7 +12,6 @@ import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY || 'TEST-00000000-0000-0000-0000-000000000000';
 initMercadoPago(MP_PUBLIC_KEY, { locale: 'es-AR' });
 
-// Exchange rate placeholder (Should ideally be dynamic)
 const ARS_RATE = 1200;
 
 export default function ProductDetail() {
@@ -35,11 +34,9 @@ export default function ProductDetail() {
     }, [id, user]);
 
     useEffect(() => {
-        // Auto-unlock logic from MP redirect
         const status = searchParams.get('payment_status');
         if (status === 'approved') {
-            setHasPurchased(true); // Optimistic UI
-            // Ideally also verify with backend, but for now we trust the redirect + optimistic
+            setHasPurchased(true);
         }
     }, [searchParams]);
 
@@ -54,18 +51,15 @@ export default function ProductDetail() {
             if (error) throw error;
             setModel(data);
 
-            // Get Signed URL for Viewer
             const { data: signData } = await supabase
                 .storage
                 .from('models')
                 .createSignedUrl(data.file_path, 3600);
             if (signData) setSignedUrl(signData.signedUrl);
 
-            // Check Ownership
             if (data.price === 0) {
                 setHasPurchased(true);
             } else if (user) {
-                // Check transactions
                 const { data: tx } = await supabase
                     .from('transactions')
                     .select('status')
@@ -78,7 +72,6 @@ export default function ProductDetail() {
                 if (tx) {
                     setHasPurchased(true);
                 } else {
-                    // Check admin/creator ownership
                     if (data.seller_id === user.id) setHasPurchased(true);
                 }
             }
@@ -98,7 +91,7 @@ export default function ProductDetail() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     title: model.title,
-                    unit_price: model.price * ARS_RATE, // Convert to ARS
+                    unit_price: model.price * ARS_RATE,
                     quantity: 1,
                     productId: model.id
                 })
@@ -116,7 +109,6 @@ export default function ProductDetail() {
 
     const handlePayPalApprove = async (data: any, actions: any) => {
         return actions.order.capture().then(async (details: any) => {
-            // Paid successfully
             const { error } = await supabase.from('transactions').insert({
                 buyer_id: user?.id,
                 model_id: model.id,
@@ -208,7 +200,6 @@ export default function ProductDetail() {
                     )}
                 </div>
 
-                {/* Description */}
                 <div className="space-y-4">
                     <h3 className="text-xl font-bold">Description</h3>
                     <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{model.description}</p>
@@ -217,41 +208,53 @@ export default function ProductDetail() {
                 {/* Payment Modal */}
                 {showPaymentModal && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                        <div className="bg-surface border border-white/10 rounded-2xl p-8 max-w-md w-full space-y-6 shadow-2xl relative">
+                        <div className="bg-surface border border-white/10 rounded-2xl p-8 max-w-md w-full space-y-6 shadow-2xl relative overflow-y-auto max-h-[90vh]">
                             <button
                                 onClick={() => setShowPaymentModal(false)}
                                 className="absolute top-4 right-4 text-gray-400 hover:text-white"
                             >✕</button>
 
-                            <h3 className="text-2xl font-bold mb-4">
-                                {isArgentina ? t.payment.title_arg : t.payment.title_intl}
+                            <h3 className="text-2xl font-bold mb-6 text-center">
+                                Selecciona Método de Pago
                             </h3>
 
-                            <div className="p-4 bg-primary/10 rounded-lg border border-primary/20 text-center mb-6">
-                                <p className="text-3xl font-bold text-white">
-                                    {isArgentina ? `$${(model.price * ARS_RATE).toLocaleString('es-AR')}` : `$${model.price}`}
+                            {/* Mercado Pago Option */}
+                            <div className="mb-8 p-4 bg-[#009EE3]/10 rounded-xl border border-[#009EE3]/30">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h4 className="text-xl font-bold text-[#009EE3]">Mercado Pago</h4>
+                                    <span className="font-mono text-white bg-black/30 px-2 py-1 rounded">ARS</span>
+                                </div>
+                                <p className="text-white text-2xl font-bold mb-4">
+                                    ${(model.price * ARS_RATE).toLocaleString('es-AR')}
                                 </p>
+                                {!preferenceId ? (
+                                    <button
+                                        onClick={handleCreatePreference}
+                                        disabled={creatingPreference}
+                                        className="w-full py-3 bg-[#009EE3] hover:bg-[#008ED0] text-white font-bold rounded-lg transition-colors flex justify-center items-center shadow-lg"
+                                    >
+                                        {creatingPreference ? <Loader2 className="animate-spin" /> : t.payment.pay_mp}
+                                    </button>
+                                ) : (
+                                    <Wallet initialization={{ preferenceId: preferenceId }} customization={{ texts: { valueProp: 'smart_option' } }} />
+                                )}
                             </div>
 
-                            {isArgentina ? (
-                                <div className="space-y-4">
-                                    {!preferenceId ? (
-                                        <button
-                                            onClick={handleCreatePreference}
-                                            disabled={creatingPreference}
-                                            className="w-full py-3 bg-[#009EE3] hover:bg-[#008ED0] text-white font-bold rounded-lg transition-colors flex justify-center items-center"
-                                        >
-                                            {creatingPreference ? <Loader2 className="animate-spin" /> : t.payment.pay_mp}
-                                        </button>
-                                    ) : (
-                                        <Wallet initialization={{ preferenceId: preferenceId }} customization={{ texts: { valueProp: 'smart_option' } }} />
-                                    )}
+                            <div className="border-t border-white/10 my-6"></div>
+
+                            {/* PayPal Option */}
+                            <div className="p-4 bg-[#003087]/10 rounded-xl border border-[#003087]/30">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h4 className="text-xl font-bold text-[#003087]">PayPal</h4>
+                                    <span className="font-mono text-white bg-black/30 px-2 py-1 rounded">USD</span>
                                 </div>
-                            ) : (
-                                <div className="w-full">
-                                    <PayPalScriptProvider options={{ clientId: "test", currency: "USD" }}>
+                                <p className="text-white text-2xl font-bold mb-4">
+                                    ${model.price}
+                                </p>
+                                <div className="w-full z-0 relative">
+                                    <PayPalScriptProvider options={{ clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || "test", currency: "USD" }}>
                                         <PayPalButtons
-                                            style={{ layout: "vertical" }}
+                                            style={{ layout: "vertical", color: "blue", shape: "rect", label: "pay" }}
                                             createOrder={(data, actions) => {
                                                 return actions.order.create({
                                                     purchase_units: [{
@@ -263,7 +266,7 @@ export default function ProductDetail() {
                                         />
                                     </PayPalScriptProvider>
                                 </div>
-                            )}
+                            </div>
 
                             <p className="text-center text-xs text-gray-500 mt-4">
                                 {t.product.secure}
