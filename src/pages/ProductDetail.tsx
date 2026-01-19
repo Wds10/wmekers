@@ -260,15 +260,13 @@ export default function ProductDetail() {
 
     const [showPaymentModal, setShowPaymentModal] = useState(false);
 
-    // Safe Render: Ensure model exists before accessing properties
-    if (loading) return <div className="flex justify-center items-center h-96"><Loader2 className="animate-spin text-primary" size={48} /></div>;
-    if (!model) return <div className="text-center p-12 text-xl">Model not found</div>;
+    // OPTIMISTIC SUCCESS RENDER (Prevents Black Screen)
+    // If URL indicates success, show the view IMMEDIATELY while data loads in background.
+    const isPaymentApproved = searchParams.get('payment_status') === 'approved';
+    const isPaymentFailure = searchParams.get('payment_status') === 'failure';
 
-    // RECOVERY VIEW REMOVED - Backend handles verification now.
-
-
-    // SUCCESS VIEW - Mobile Safe (No 3D Viewer, No Complex Grid)
-    if (hasPurchased) {
+    // Recovery/Success View Logic
+    if (isPaymentApproved || hasPurchased) {
         return (
             <div className="max-w-lg mx-auto py-12 px-4 text-center animate-fade-in">
                 <div className="bg-surface border border-green-500/30 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
@@ -282,21 +280,24 @@ export default function ProductDetail() {
 
                         <div className="space-y-2">
                             <h1 className="text-3xl font-bold text-white">{t.payment.success}</h1>
-                            <p className="text-gray-400">{t.product.download_ready || "Tu archivo está listo para descargar."}</p>
+                            <p className="text-gray-400">{t.product.download_ready}</p>
                         </div>
 
                         <div className="py-6">
+                            {/* Show loading state on button if not yet verified/signed */}
                             <button
-                                onClick={() => handleDownload()} // Fixed: Arrow function prevents event passing
-                                className="w-full py-5 bg-green-500 hover:bg-green-600 active:scale-95 text-white font-bold text-xl rounded-xl shadow-xl hover:shadow-green-500/25 transition-all flex items-center justify-center gap-3 animate-pulse"
+                                onClick={() => handleDownload()}
+                                disabled={!signedUrl && !hasPurchased}
+                                className={`w-full py-5 font-bold text-xl rounded-xl shadow-xl transition-all flex items-center justify-center gap-3 
+                                    ${signedUrl || hasPurchased ? 'bg-green-500 hover:bg-green-600 hover:shadow-green-500/25 text-white animate-pulse' : 'bg-gray-700 text-gray-400 cursor-wait'}`}
                             >
-                                <Download size={28} />
-                                <span>{t.product.download}</span>
+                                {(signedUrl || hasPurchased) ? <Download size={28} /> : <Loader2 className="animate-spin" size={28} />}
+                                <span>{(signedUrl || hasPurchased) ? t.product.download : "Verifying..."}</span>
                             </button>
                         </div>
 
                         <div className="text-sm text-gray-500 pt-4 border-t border-white/10">
-                            <p>ID de Transacción: {searchParams.get('payment_id') || 'Registrado'}</p>
+                            <p>ID: {searchParams.get('payment_id') || 'Processing...'}</p>
                             <a href="/" className="text-primary hover:underline mt-2 inline-block">Volver a la tienda</a>
                         </div>
                     </div>
@@ -304,6 +305,15 @@ export default function ProductDetail() {
             </div>
         );
     }
+
+    // Safe Render: Ensure model exists before accessing properties
+    if (loading) return <div className="flex justify-center items-center h-96"><Loader2 className="animate-spin text-primary" size={48} /></div>;
+    if (!model) return <div className="text-center p-12 text-xl">Model not found</div>;
+
+    // RECOVERY VIEW REMOVED - Backend handles verification now.
+
+
+    // Old Success View removed (moved to top for Optimistic Render)
 
     const isArgentina = profile?.country === 'Argentina';
 
