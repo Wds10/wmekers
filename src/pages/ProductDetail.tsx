@@ -263,7 +263,6 @@ export default function ProductDetail() {
     // OPTIMISTIC SUCCESS RENDER (Prevents Black Screen)
     // If URL indicates success, show the view IMMEDIATELY while data loads in background.
     const isPaymentApproved = searchParams.get('payment_status') === 'approved';
-    const isPaymentFailure = searchParams.get('payment_status') === 'failure';
 
     // Recovery/Success View Logic
     if (isPaymentApproved || hasPurchased) {
