@@ -4,6 +4,7 @@ import { Download, Loader2, CheckCircle, AlertTriangle, Package } from 'lucide-r
 import { supabase } from '../lib/supabase';
 
 export default function PaymentSuccess() {
+    // Verified Build: 2026-01-20 Refresh
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
