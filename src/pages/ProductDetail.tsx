@@ -267,23 +267,33 @@ export default function ProductDetail() {
                         <span className="text-xs font-mono px-2 py-1 bg-white/5 rounded border border-white/10">{model.license} {t.product.license}</span>
                     </div>
 
-                    {/* Pay / Download Button */}
-                    {model.price === 0 ? (
+                    {/* Pay / Download Button based on Purchase Status */}
+                    {hasPurchased ? (
                         <button
-                            onClick={() => handleDownload()} // Direct download logic
+                            onClick={() => handleDownload()}
                             className="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-bold text-lg rounded-lg transition-all shadow-[0_0_20px_rgba(22,163,74,0.4)] hover:shadow-[0_0_30px_rgba(22,163,74,0.6)] flex items-center justify-center space-x-2"
                         >
                             <Package size={20} />
-                            <span>Descargar Gratis</span>
+                            <span>Descargar Ahora (Comprado)</span>
                         </button>
                     ) : (
-                        <button
-                            onClick={() => setShowPaymentModal(true)}
-                            className="w-full py-4 bg-white text-black font-bold text-lg rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
-                        >
-                            <ShoppingCart size={20} />
-                            <span>{t.product.pay}</span>
-                        </button>
+                        model.price === 0 ? (
+                            <button
+                                onClick={() => handleDownload()} // Direct download logic
+                                className="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-bold text-lg rounded-lg transition-all shadow-[0_0_20px_rgba(22,163,74,0.4)] hover:shadow-[0_0_30px_rgba(22,163,74,0.6)] flex items-center justify-center space-x-2"
+                            >
+                                <Package size={20} />
+                                <span>Descargar Gratis</span>
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => setShowPaymentModal(true)}
+                                className="w-full py-4 bg-white text-black font-bold text-lg rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
+                            >
+                                <ShoppingCart size={20} />
+                                <span>{t.product.pay}</span>
+                            </button>
+                        )
                     )}
                 </div>
 
