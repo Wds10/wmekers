@@ -9,5 +9,19 @@
 body {
   @apply bg-background text-text antialiased;
   margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-black/40 backdrop-blur-md border border-white/10;
+  }
+
+  .glass-card {
+    @apply bg-surface/80 backdrop-blur-sm border border-white/5 hover:bg-surfaceHighlight/90 transition-all duration-300;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px rgba(131, 0, 233, 0.5);
+  }
 }
