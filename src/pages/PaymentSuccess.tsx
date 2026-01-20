@@ -12,10 +12,10 @@ export default function PaymentSuccess() {
     const [signedUrl, setSignedUrl] = useState<string | null>(null);
     const [message, setMessage] = useState('Verifying payment...');
 
-    const paymentId = searchParams.get('payment_id');
+    const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id');
     const merchantOrder = searchParams.get('merchant_order_id');
     const modelId = searchParams.get('model_id');
-    const paymentStatus = searchParams.get('payment_status');
+    const paymentStatus = searchParams.get('payment_status') || searchParams.get('status') || searchParams.get('collection_status');
 
     useEffect(() => {
         const verify = async () => {
