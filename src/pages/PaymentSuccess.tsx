@@ -2,37 +2,88 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Download, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
 
-
 export default function PaymentSuccess() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
+    const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying');
+    const [signedUrl, setSignedUrl] = useState<string | null>(null);
     const [filename, setFilename] = useState<string | null>(null);
+    const [message, setMessage] = useState('Verifying payment...');
 
-    // ... (inside useEffect)
-    if (response.ok && result.success) {
-        setStatus('success');
-        setSignedUrl(result.signedUrl);
-        setFilename(result.filename); // Set filename
+    const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id');
+    const merchantOrder = searchParams.get('merchant_order_id');
+    const modelId = searchParams.get('model_id');
+    const paymentStatus = searchParams.get('payment_status') || searchParams.get('status') || searchParams.get('collection_status');
 
-        // Force persist in LocalStorage as backup
-        if (result.signedUrl) {
-            localStorage.setItem(`purchased_${modelId}`, result.signedUrl);
-        }
-
-        // Auto Download Attempt
-        setTimeout(() => {
-            if (result.signedUrl) {
-                const a = document.createElement('a');
-                a.href = result.signedUrl;
-                a.download = result.filename || `model_${modelId}.zip`; // Use specific filename
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+    useEffect(() => {
+        const verify = async () => {
+            if (!modelId || (paymentStatus !== 'approved' && paymentStatus !== 'completed')) {
+                // strict check, but accept completed for manual/free
+                if (paymentStatus === 'failure' || paymentStatus === 'rejected') {
+                    setStatus('error');
+                    setMessage('Payment was rejected or failed.');
+                    return;
+                }
+                // Allow verification to proceed if parameters exist, backend will confirm.
+                if (!paymentId && !merchantOrder) {
+                    setStatus('error');
+                    setMessage('Invalid payment parameters.');
+                    return;
+                }
             }
-        }, 1500);
-    }
-    // ...
+
+            try {
+                // CALL BACKEND VERIFICATION
+                const response = await fetch('/api/verify-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        paymentId: paymentId || merchantOrder,
+                        modelId: modelId
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    setStatus('success');
+                    setSignedUrl(result.signedUrl);
+                    if (result.filename) setFilename(result.filename);
+
+                    // Force persist in LocalStorage as backup
+                    if (result.signedUrl) {
+                        localStorage.setItem(`purchased_${modelId}`, result.signedUrl);
+                    }
+
+                    // Auto Download Attempt
+                    setTimeout(() => {
+                        if (result.signedUrl) {
+                            const a = document.createElement('a');
+                            a.href = result.signedUrl;
+                            a.download = result.filename || `model_${modelId}.zip`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                        }
+                    }, 1500);
+
+                } else {
+                    console.error("Verification failed", result);
+                    setStatus('error');
+                    setMessage(result.error || 'Payment verification failed. Please contact support.');
+                }
+            } catch (err) {
+                console.error(err);
+                setStatus('error');
+                setMessage('Server error verifying payment.');
+            }
+        };
+
+        if (status === 'verifying') {
+            verify();
+        }
+    }, [modelId, paymentId, merchantOrder, paymentStatus]);
 
     const handleDownload = () => {
         if (signedUrl) {
@@ -89,7 +140,7 @@ export default function PaymentSuccess() {
                         </div>
                         <h2 className="text-2xl font-bold text-red-400">Verification Issue</h2>
                         <p className="text-gray-400">{message}</p>
-                        <p className="text-xs text-gray-500 mt-2">ID: {paymentId}</p>
+                        <p className="text-xs text-gray-500 mt-2">ID: {paymentId || 'N/A'}</p>
 
                         <button
                             onClick={() => navigate(`/model/${modelId}`)}
@@ -104,4 +155,3 @@ export default function PaymentSuccess() {
         </div>
     );
 }
-
