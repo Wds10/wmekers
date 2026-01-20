@@ -28,7 +28,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 ],
                 external_reference: userId, // Link payment to user
                 back_urls: {
-                    success: `${req.headers.origin}/product/${productId}?payment_status=approved&user_ref=${userId}`,
+                    success: `${req.headers.origin}/payment-success?model_id=${productId}&user_ref=${userId}`,
                     failure: `${req.headers.origin}/product/${productId}?payment_status=failure`,
                     pending: `${req.headers.origin}/product/${productId}?payment_status=pending`,
                 },

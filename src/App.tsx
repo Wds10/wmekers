@@ -11,6 +11,8 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 
+import PaymentSuccess from './pages/PaymentSuccess';
+
 function App() {
   return (
     <LanguageProvider>
@@ -26,6 +28,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/payment-success" element={<PaymentSuccess />} />
             </Routes>
           </Layout>
         </Router>
