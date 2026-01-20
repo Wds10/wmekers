@@ -108,8 +108,9 @@ export default function Profile() {
                         {purchases.map(tx => (
                             <div key={tx.id} className="bg-surface rounded-xl p-4 border border-white/5 flex items-center justify-between">
                                 <div className="flex items-center space-x-4">
-                                    <div className="w-16 h-16 bg-black/50 rounded-lg overflow-hidden">
-                                        {/* Thumbnail if available */}
+                                    <div className="w-16 h-16 bg-black/50 rounded-lg overflow-hidden relative">
+                                        {/* Thumbnail or Icon */}
+                                        <Package className="w-full h-full p-4 text-gray-600" />
                                     </div>
                                     <div>
                                         <div className="font-bold">{tx.models?.title}</div>
