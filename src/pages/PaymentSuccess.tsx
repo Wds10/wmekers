@@ -135,7 +135,7 @@ export default function PaymentSuccess() {
                         {modelInfo && (
                             <div className="bg-white/5 rounded-xl p-4 flex gap-4 text-left border border-white/5 items-center w-full">
                                 <div className="w-20 h-20 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <Package className="text-gray-400 w-10 h-10" />
+                                    <Package className="text-green-500 w-10 h-10" />
                                 </div>
                                 <div className="flex-1 min-w-0 flex flex-col justify-center gap-2">
                                     <h3 className="font-bold text-lg leading-tight truncate">{modelInfo.title}</h3>
