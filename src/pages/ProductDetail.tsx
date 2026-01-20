@@ -156,9 +156,8 @@ export default function ProductDetail() {
                 .createSignedUrl(data.file_path, 3600);
             if (signData) setSignedUrl(signData.signedUrl);
 
-            if (data.price === 0) {
-                setHasPurchased(true);
-            } else if (user) {
+            // CHECK TRANSACTION STATUS
+            if (user) {
                 const { data: tx } = await supabase
                     .from('transactions')
                     .select('status')
@@ -171,13 +170,40 @@ export default function ProductDetail() {
                 if (tx) {
                     setHasPurchased(true);
                 } else {
-                    if (data.seller_id === user.id) setHasPurchased(true);
+                    // IF MODEL IS FREE AND NO TRANSACTION EXISTS -> CREATE ONE (For Persistence)
+                    if (data.price === 0) {
+                        await createFreeTransaction(modelId, user.id);
+                        setHasPurchased(true);
+                    } else if (data.seller_id === user.id) {
+                        setHasPurchased(true); // Sellers own their models
+                    }
                 }
+            } else if (data.price === 0) {
+                // Guest User showing free model (State only, no persistence)
+                setHasPurchased(true);
             }
         } catch (err) {
             console.error(err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const createFreeTransaction = async (modelId: string, userId: string) => {
+        try {
+            const { error } = await supabase.from('transactions').insert({
+                buyer_id: userId,
+                model_id: modelId,
+                amount: 0,
+                platform_fee: 0,
+                seller_earnings: 0,
+                payment_method: 'free',
+                status: 'completed',
+                payment_id: `free_${userId}_${modelId}`
+            });
+            if (error) console.error("Error creating free tx:", error);
+        } catch (e) {
+            console.error(e);
         }
     };
 
