@@ -5,7 +5,10 @@ import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import ThreeViewer from '../components/ThreeViewer';
 import { ShoppingCart, User as UserIcon, ShoppingBag, Loader2 } from 'lucide-react';
-// ...
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+
+const ARS_RATE = 1200;
+
 export default function ProductDetail() {
     const { id } = useParams();
     // const [searchParams] = useSearchParams();
