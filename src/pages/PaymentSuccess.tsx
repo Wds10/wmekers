@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Download, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
-import { useLanguage } from '../context/LanguageContext';
+// import { useLanguage } from '../context/LanguageContext';
 
 export default function PaymentSuccess() {
     const [searchParams] = useSearchParams();
