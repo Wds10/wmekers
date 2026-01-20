@@ -113,22 +113,26 @@ export default function PaymentSuccess() {
                         <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto ring-4 ring-green-500/10">
                             <CheckCircle className="w-10 h-10 text-green-500" />
                         </div>
-                        <h2 className="text-2xl font-bold text-green-400">Payment Successful!</h2>
-                        <p className="text-gray-300">Your transaction has been verified.</p>
+                        <h2 className="text-2xl font-bold text-green-400">¡Pago Exitoso!</h2>
+                        <p className="text-gray-300">Tu transacción ha sido verificada correctamente.</p>
 
                         <button
                             onClick={handleDownload}
                             className="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 animate-bounce-subtle"
                         >
                             <Download size={24} />
-                            <span>Download Now</span>
+                            <span>Descargar Archivo</span>
                         </button>
+
+                        <div className="text-sm text-gray-500 mt-2">
+                            Si la descarga no comienza automáticamente, haz clic en el botón.
+                        </div>
 
                         <button
                             onClick={() => navigate(`/model/${modelId}`)}
-                            className="text-sm text-gray-500 hover:text-white underline mt-4"
+                            className="text-sm text-gray-400 hover:text-white underline mt-6"
                         >
-                            Return to Product Page
+                            Volver al producto
                         </button>
                     </>
                 )}
@@ -138,15 +142,16 @@ export default function PaymentSuccess() {
                         <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto ring-4 ring-red-500/10">
                             <AlertTriangle className="w-10 h-10 text-red-500" />
                         </div>
-                        <h2 className="text-2xl font-bold text-red-400">Verification Issue</h2>
-                        <p className="text-gray-400">{message}</p>
-                        <p className="text-xs text-gray-500 mt-2">ID: {paymentId || 'N/A'}</p>
+                        <h2 className="text-2xl font-bold text-red-400">Pago No Exitoso</h2>
+                        <p className="text-gray-400">No se pudo verificar el pago o fue rechazado.</p>
+                        <p className="text-sm text-gray-500 bg-black/20 p-2 rounded">{message}</p>
+                        <p className="text-xs text-gray-500 mt-1">ID Ref: {paymentId || 'N/A'}</p>
 
                         <button
                             onClick={() => navigate(`/model/${modelId}`)}
-                            className="px-6 py-2 bg-white/5 hover:bg-white/10 rounded-lg"
+                            className="w-full py-3 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors mt-4"
                         >
-                            Back to Product
+                            Intentar pagar nuevamente
                         </button>
                     </>
                 )}
