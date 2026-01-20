@@ -10,12 +10,26 @@ export default function PaymentSuccess() {
     const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying');
     const [signedUrl, setSignedUrl] = useState<string | null>(null);
     const [filename, setFilename] = useState<string | null>(null);
-    const [message, setMessage] = useState('Verifying payment...');
+    const [message, setMessage] = useState('Verificando pago...');
+
+    // State for display info
+    const [modelInfo, setModelInfo] = useState<{ title: string; price: number } | null>(null);
 
     const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id');
     const merchantOrder = searchParams.get('merchant_order_id');
     const modelId = searchParams.get('model_id');
     const paymentStatus = searchParams.get('payment_status') || searchParams.get('status') || searchParams.get('collection_status');
+
+    // Fetch basic model info for display
+    useEffect(() => {
+        const fetchModelInfo = async () => {
+            if (modelId) {
+                const { data } = await supabase.from('models').select('title, price').eq('id', modelId).single();
+                if (data) setModelInfo(data);
+            }
+        };
+        fetchModelInfo();
+    }, [modelId]);
 
     useEffect(() => {
         const verify = async () => {
@@ -23,13 +37,13 @@ export default function PaymentSuccess() {
                 // strict check, but accept completed for manual/free
                 if (paymentStatus === 'failure' || paymentStatus === 'rejected') {
                     setStatus('error');
-                    setMessage('Payment was rejected or failed.');
+                    setMessage('El pago fue rechazado o falló.');
                     return;
                 }
                 // Allow verification to proceed if parameters exist, backend will confirm.
                 if (!paymentId && !merchantOrder) {
                     setStatus('error');
-                    setMessage('Invalid payment parameters.');
+                    setMessage('Parámetros de pago inválidos.');
                     return;
                 }
             }
@@ -72,12 +86,12 @@ export default function PaymentSuccess() {
                 } else {
                     console.error("Verification failed", result);
                     setStatus('error');
-                    setMessage(result.error || 'Payment verification failed. Please contact support.');
+                    setMessage(result.error || 'Verificación de pago fallida.');
                 }
             } catch (err) {
                 console.error(err);
                 setStatus('error');
-                setMessage('Server error verifying payment.');
+                setMessage('Error del servidor verificando el pago.');
             }
         };
 
@@ -104,8 +118,8 @@ export default function PaymentSuccess() {
                 {status === 'verifying' && (
                     <>
                         <Loader2 className="w-16 h-16 text-primary animate-spin mx-auto" />
-                        <h2 className="text-2xl font-bold">Verifying Payment...</h2>
-                        <p className="text-gray-400">Please wait while we secure your download.</p>
+                        <h2 className="text-2xl font-bold">Verificando Pago...</h2>
+                        <p className="text-gray-400">Por favor espera un momento.</p>
                     </>
                 )}
 
@@ -115,7 +129,19 @@ export default function PaymentSuccess() {
                             <CheckCircle className="w-10 h-10 text-green-500" />
                         </div>
                         <h2 className="text-2xl font-bold text-green-400">¡Pago Exitoso!</h2>
-                        <p className="text-gray-300">Tu transacción ha sido verificada correctamente.</p>
+
+                        {/* Product Display Card */}
+                        {modelInfo && (
+                            <div className="bg-white/5 rounded-xl p-4 flex items-center gap-4 text-left border border-white/5">
+                                <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <Package className="text-gray-400 w-8 h-8" />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg leading-tight line-clamp-1">{modelInfo.title}</h3>
+                                    <p className="text-sm text-gray-400">Listo para descargar</p>
+                                </div>
+                            </div>
+                        )}
 
                         <button
                             onClick={handleDownload}
@@ -131,7 +157,7 @@ export default function PaymentSuccess() {
 
                         <button
                             onClick={() => navigate(`/model/${modelId}`)}
-                            className="text-sm text-gray-400 hover:text-white underline mt-6"
+                            className="text-sm text-gray-400 hover:text-white underline mt-6 px-4 py-2 hover:bg-white/5 rounded-lg transition-colors border border-transparent hover:border-white/10"
                         >
                             Volver al producto
                         </button>
@@ -144,9 +170,22 @@ export default function PaymentSuccess() {
                             <AlertTriangle className="w-10 h-10 text-red-500" />
                         </div>
                         <h2 className="text-2xl font-bold text-red-400">Pago No Exitoso</h2>
-                        <p className="text-gray-400">No se pudo verificar el pago o fue rechazado.</p>
-                        <p className="text-sm text-gray-500 bg-black/20 p-2 rounded">{message}</p>
-                        <p className="text-xs text-gray-500 mt-1">ID Ref: {paymentId || 'N/A'}</p>
+
+                        {/* Product Display Card (Error) */}
+                        {modelInfo && (
+                            <div className="bg-white/5 rounded-xl p-4 flex items-center gap-4 text-left border border-red-500/20">
+                                <div className="w-16 h-16 bg-red-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <Package className="text-red-400 w-8 h-8" />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg leading-tight line-clamp-1">{modelInfo.title}</h3>
+                                    <p className="text-sm text-red-400">Transacción fallida</p>
+                                </div>
+                            </div>
+                        )}
+
+                        <p className="text-gray-400 text-sm">El pago no pudo ser completado o fue rechazado por el procesador.</p>
+                        <p className="text-xs text-gray-500 bg-black/20 p-2 rounded font-mono break-all">{message}</p>
 
                         <button
                             onClick={() => navigate(`/model/${modelId}`)}
