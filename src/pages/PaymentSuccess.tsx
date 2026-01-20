@@ -4,7 +4,7 @@ import { Download, Loader2, CheckCircle, AlertTriangle, Package } from 'lucide-r
 import { supabase } from '../lib/supabase';
 
 export default function PaymentSuccess() {
-    // Verified Build: 2026-01-20 Refresh
+    // Verified Build: 2026-01-20 Screenshot Layout Fix
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
@@ -126,39 +126,47 @@ export default function PaymentSuccess() {
 
                 {status === 'success' && (
                     <>
-                        <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto ring-4 ring-green-500/10">
+                        <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto ring-4 ring-green-500/10 mb-4">
                             <CheckCircle className="w-10 h-10 text-green-500" />
                         </div>
-                        <h2 className="text-2xl font-bold text-green-400">¡Pago Exitoso!</h2>
+                        <h2 className="text-2xl font-bold text-green-400 mb-6">¡Pago Exitoso!</h2>
 
-                        {/* Product Display Card */}
+                        {/* Product Display Card with Integrated Button */}
                         {modelInfo && (
-                            <div className="bg-white/5 rounded-xl p-4 flex items-center gap-4 text-left border border-white/5">
-                                <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <Package className="text-gray-400 w-8 h-8" />
+                            <div className="bg-white/5 rounded-xl p-4 flex gap-4 text-left border border-white/5 items-center w-full">
+                                <div className="w-20 h-20 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <Package className="text-gray-400 w-10 h-10" />
                                 </div>
-                                <div>
-                                    <h3 className="font-bold text-lg leading-tight line-clamp-1">{modelInfo.title}</h3>
-                                    <p className="text-sm text-gray-400">Listo para descargar</p>
+                                <div className="flex-1 min-w-0 flex flex-col justify-center gap-2">
+                                    <h3 className="font-bold text-lg leading-tight truncate">{modelInfo.title}</h3>
+                                    <button
+                                        onClick={handleDownload}
+                                        className="py-2 px-4 bg-green-600 hover:bg-green-700 text-white font-bold text-sm rounded-lg shadow-lg transition-all flex items-center justify-center gap-2 w-fit"
+                                    >
+                                        <Download size={16} />
+                                        <span>Descargar archivo</span>
+                                    </button>
                                 </div>
                             </div>
                         )}
 
-                        <button
-                            onClick={handleDownload}
-                            className="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 animate-bounce-subtle"
-                        >
-                            <Download size={24} />
-                            <span>Descargar Archivo</span>
-                        </button>
+                        {!modelInfo && (
+                            <button
+                                onClick={handleDownload}
+                                className="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
+                            >
+                                <Download size={24} />
+                                <span>Descargar Archivo</span>
+                            </button>
+                        )}
 
-                        <div className="text-sm text-gray-500 mt-2">
+                        <div className="text-sm text-gray-500 mt-6">
                             Si la descarga no comienza automáticamente, haz clic en el botón.
                         </div>
 
                         <button
                             onClick={() => navigate(`/model/${modelId}`)}
-                            className="text-sm text-gray-400 hover:text-white underline mt-6 px-4 py-2 hover:bg-white/5 rounded-lg transition-colors border border-transparent hover:border-white/10"
+                            className="text-sm text-gray-400 hover:text-white underline mt-2 px-4 py-2"
                         >
                             Volver al producto
                         </button>
@@ -167,33 +175,31 @@ export default function PaymentSuccess() {
 
                 {status === 'error' && (
                     <>
-                        <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto ring-4 ring-red-500/10">
+                        <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto ring-4 ring-red-500/10 mb-4">
                             <AlertTriangle className="w-10 h-10 text-red-500" />
                         </div>
-                        <h2 className="text-2xl font-bold text-red-400">Pago No Exitoso</h2>
+                        <h2 className="text-2xl font-bold text-red-400 mb-6">Pago No Exitoso</h2>
 
                         {/* Product Display Card (Error) */}
                         {modelInfo && (
-                            <div className="bg-white/5 rounded-xl p-4 flex items-center gap-4 text-left border border-red-500/20">
-                                <div className="w-16 h-16 bg-red-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <Package className="text-red-400 w-8 h-8" />
+                            <div className="bg-white/5 rounded-xl p-4 flex gap-4 text-left border border-red-500/20 items-center w-full">
+                                <div className="w-20 h-20 bg-red-500/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <Package className="text-red-400 w-10 h-10" />
                                 </div>
-                                <div>
-                                    <h3 className="font-bold text-lg leading-tight line-clamp-1">{modelInfo.title}</h3>
-                                    <p className="text-sm text-red-400">Transacción fallida</p>
+                                <div className="flex-1 min-w-0 flex flex-col justify-center gap-2">
+                                    <h3 className="font-bold text-lg leading-tight truncate">{modelInfo.title}</h3>
+                                    <button
+                                        onClick={() => navigate(`/model/${modelId}`)}
+                                        className="py-2 px-4 bg-white text-black font-bold text-sm rounded-lg hover:bg-gray-200 transition-colors w-fit"
+                                    >
+                                        Intentar pagar nuevamente
+                                    </button>
                                 </div>
                             </div>
                         )}
 
-                        <p className="text-gray-400 text-sm">El pago no pudo ser completado o fue rechazado por el procesador.</p>
+                        <p className="text-gray-400 text-sm mt-4">El pago no pudo ser completado.</p>
                         <p className="text-xs text-gray-500 bg-black/20 p-2 rounded font-mono break-all">{message}</p>
-
-                        <button
-                            onClick={() => navigate(`/model/${modelId}`)}
-                            className="w-full py-3 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-colors mt-4"
-                        >
-                            Intentar pagar nuevamente
-                        </button>
                     </>
                 )}
 
