@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import ThreeViewer from '../components/ThreeViewer';
-import { ShoppingCart, User as UserIcon, ShoppingBag, Loader2 } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, ShoppingBag, Loader2, Package } from 'lucide-react';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const ARS_RATE = 1200;
@@ -282,84 +282,100 @@ export default function ProductDetail() {
                     <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{model.description || 'No description available.'}</p>
                 </div>
 
-                {/* Payment Modal */}
+                {/* Payment Modal / Checkout Pop-up */}
                 {showPaymentModal && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-                        <div className="bg-surface border border-white/10 rounded-2xl p-8 max-w-md w-full space-y-6 shadow-2xl relative overflow-y-auto max-h-[90vh]">
-                            <button
-                                onClick={() => setShowPaymentModal(false)}
-                                className="absolute top-4 right-4 text-gray-400 hover:text-white"
-                            >✕</button>
+                        <div className="bg-white text-black rounded-lg max-w-lg w-full shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
 
-                            <h3 className="text-2xl font-bold mb-6 text-center">
-                                Selecciona Método de Pago
-                            </h3>
-
-                            {/* Mercado Pago Option */}
-                            <div className="mb-8 p-4 bg-[#009EE3]/10 rounded-xl border border-[#009EE3]/30">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h4 className="text-xl font-bold text-[#009EE3]">Mercado Pago</h4>
-                                    <span className="font-mono text-white bg-black/30 px-2 py-1 rounded">ARS</span>
-                                </div>
-                                <p className="text-white text-2xl font-bold mb-4">
-                                    ${Number(model.price * ARS_RATE).toLocaleString('es-AR')}
-                                </p>
-                                {!preferenceId ? (
-                                    <button
-                                        onClick={handleCreatePreference}
-                                        disabled={creatingPreference}
-                                        className="w-full py-3 bg-[#009EE3] hover:bg-[#008ED0] text-white font-bold rounded-lg transition-colors flex justify-center items-center shadow-lg"
-                                    >
-                                        {creatingPreference ? <Loader2 className="animate-spin" /> : t.payment.pay_mp}
-                                    </button>
-                                ) : (
-                                    <a
-                                        href={preferenceId}
-                                        className="w-full py-3 bg-[#009EE3] hover:bg-[#008ED0] text-white font-bold rounded-lg transition-colors flex justify-center items-center shadow-lg text-center"
-                                    >
-                                        Pagar ahora en Mercado Pago
-                                    </a>
-                                )}
-                                <p className="text-xs text-white/50 text-center mt-2">
-                                    (Comisión aplicada por plataforma)
-                                </p>
+                            {/* Header */}
+                            <div className="bg-gray-100 px-6 py-4 flex items-center justify-between border-b border-gray-200">
+                                <h3 className="text-xl font-bold text-gray-800">Finalizar Compra</h3>
+                                <button onClick={() => setShowPaymentModal(false)} className="text-gray-500 hover:text-black transition-colors text-2xl leading-none">&times;</button>
                             </div>
 
-                            <div className="border-t border-white/10 my-6"></div>
-
-                            {/* PayPal Option */}
-                            <div className="p-4 bg-[#003087]/10 rounded-xl border border-[#003087]/30">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h4 className="text-xl font-bold text-[#003087]">PayPal</h4>
-                                    <span className="font-mono text-white bg-black/30 px-2 py-1 rounded">USD</span>
+                            <div className="p-6 space-y-6">
+                                {/* Order Summary */}
+                                <div className="flex items-start space-x-4">
+                                    <div className="w-20 h-20 bg-gray-200 rounded-md overflow-hidden flex-shrink-0 flex items-center justify-center">
+                                        <Package className="text-gray-400 w-10 h-10" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <h4 className="font-bold text-lg leading-tight">{model.title}</h4>
+                                        <p className="text-sm text-gray-500 mt-1">Licencia: {model.license}</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <div className="font-bold text-xl">${model.price} USD</div>
+                                        <div className="text-sm text-gray-500">~ ${(model.price * ARS_RATE).toLocaleString('es-AR')} ARS</div>
+                                    </div>
                                 </div>
-                                <p className="text-white text-2xl font-bold mb-4">
-                                    ${model.price}
-                                </p>
-                                <div className="w-full z-0 relative">
-                                    <PayPalScriptProvider options={{ clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || "test", currency: "USD" }}>
-                                        <PayPalButtons
-                                            style={{ layout: "vertical", color: "blue", shape: "rect", label: "pay" }}
-                                            createOrder={(_data, actions) => {
-                                                return actions.order.create({
-                                                    intent: "CAPTURE",
-                                                    purchase_units: [{
-                                                        amount: {
-                                                            value: model.price.toString(),
-                                                            currency_code: 'USD'
-                                                        }
-                                                    }]
-                                                });
-                                            }}
-                                            onApprove={handlePayPalApprove}
-                                        />
-                                    </PayPalScriptProvider>
+
+                                <hr className="border-gray-200" />
+
+                                {/* Payment Methods Title */}
+                                <div>
+                                    <h4 className="font-medium text-gray-700 mb-3">Selecciona método de pago</h4>
+
+                                    <div className="space-y-3">
+                                        {/* Mercado Pago Button */}
+                                        <div className="relative">
+                                            {!preferenceId ? (
+                                                <button
+                                                    onClick={handleCreatePreference}
+                                                    disabled={creatingPreference}
+                                                    className="w-full flex items-center justify-between p-4 border-2 border-transparent bg-[#009EE3] hover:bg-[#008ED0] text-white rounded-lg transition-all shadow-md group"
+                                                >
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="bg-white/20 p-2 rounded">
+                                                            <div className="w-6 h-6 flex items-center justify-center font-bold text-white text-xs">MP</div>
+                                                        </div>
+                                                        <div className="text-left">
+                                                            <div className="font-bold text-lg">Mercado Pago</div>
+                                                            <div className="text-xs text-blue-100">Tarjetas de crédito, débito y efectivo</div>
+                                                        </div>
+                                                    </div>
+                                                    {creatingPreference ? <Loader2 className="animate-spin" /> : <span className="font-bold text-xl">${(model.price * ARS_RATE).toLocaleString('es-AR')} ARS</span>}
+                                                </button>
+                                            ) : (
+                                                <a
+                                                    href={preferenceId}
+                                                    className="w-full flex items-center justify-between p-4 border-2 border-[#009EE3] bg-white hover:bg-blue-50 text-[#009EE3] rounded-lg transition-all shadow-md"
+                                                >
+                                                    <span className="font-bold">Continuar a Mercado Pago &rarr;</span>
+                                                </a>
+                                            )}
+                                        </div>
+
+                                        {/* PayPal Button Container */}
+                                        <div className="relative bg-[#003087]/5 rounded-lg border border-[#003087]/20 p-1">
+                                            <PayPalScriptProvider options={{ clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || "test", currency: "USD" }}>
+                                                <PayPalButtons
+                                                    style={{ layout: "horizontal", color: "blue", height: 50, tagline: false, label: "pay" }}
+                                                    createOrder={(_data, actions) => {
+                                                        return actions.order.create({
+                                                            intent: "CAPTURE",
+                                                            purchase_units: [{
+                                                                amount: {
+                                                                    value: model.price.toString(),
+                                                                    currency_code: 'USD'
+                                                                }
+                                                            }]
+                                                        });
+                                                    }}
+                                                    onApprove={handlePayPalApprove}
+                                                />
+                                            </PayPalScriptProvider>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <p className="text-center text-xs text-gray-500 mt-4">
-                                {t.product.secure}
-                            </p>
+                            {/* Footer */}
+                            <div className="bg-gray-50 px-6 py-3 text-center border-t border-gray-200">
+                                <p className="text-xs text-gray-500 flex items-center justify-center gap-1">
+                                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    Pagos procesados de forma segura con cifrado SSL.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 )}
