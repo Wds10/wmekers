@@ -296,75 +296,94 @@ export default function ProductDetail() {
                             <div className="p-6 space-y-6">
                                 {/* Order Summary */}
                                 <div className="flex items-start space-x-4">
-                                    <div className="w-20 h-20 bg-gray-200 rounded-md overflow-hidden flex-shrink-0 flex items-center justify-center">
-                                        <Package className="text-gray-400 w-10 h-10" />
+                                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-200 rounded-md overflow-hidden flex-shrink-0 flex items-center justify-center">
+                                        <Package className="text-gray-400 w-8 h-8 sm:w-10 sm:h-10" />
                                     </div>
-                                    <div className="flex-1">
-                                        <h4 className="font-bold text-lg leading-tight">{model.title}</h4>
+                                    <div className="flex-1 min-w-0">
+                                        <h4 className="font-bold text-lg leading-tight truncate">{model.title}</h4>
                                         <p className="text-sm text-gray-500 mt-1">Licencia: {model.license}</p>
                                     </div>
-                                    <div className="text-right">
-                                        <div className="font-bold text-xl">${model.price} USD</div>
-                                        <div className="text-sm text-gray-500">~ ${(model.price * ARS_RATE).toLocaleString('es-AR')} ARS</div>
+                                    <div className="text-right flex-shrink-0">
+                                        {model.price === 0 ? (
+                                            <div className="font-bold text-xl text-green-600">FREE</div>
+                                        ) : (
+                                            <>
+                                                <div className="font-bold text-xl">${model.price} USD</div>
+                                                <div className="text-sm text-gray-500">~ ${(model.price * ARS_RATE).toLocaleString('es-AR')} ARS</div>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
 
                                 <hr className="border-gray-200" />
 
-                                {/* Payment Methods Title */}
+                                {/* Payment/Download Section */}
                                 <div>
-                                    <h4 className="font-medium text-gray-700 mb-3">Selecciona método de pago</h4>
+                                    <h4 className="font-medium text-gray-700 mb-3">
+                                        {model.price === 0 ? "Descargar ahora" : "Selecciona método de pago"}
+                                    </h4>
 
                                     <div className="space-y-3">
-                                        {/* Mercado Pago Button */}
-                                        <div className="relative">
-                                            {!preferenceId ? (
-                                                <button
-                                                    onClick={handleCreatePreference}
-                                                    disabled={creatingPreference}
-                                                    className="w-full flex items-center justify-between p-4 border-2 border-transparent bg-[#009EE3] hover:bg-[#008ED0] text-white rounded-lg transition-all shadow-md group"
-                                                >
-                                                    <div className="flex items-center space-x-3">
-                                                        <div className="bg-white/20 p-2 rounded">
-                                                            <div className="w-6 h-6 flex items-center justify-center font-bold text-white text-xs">MP</div>
-                                                        </div>
-                                                        <div className="text-left">
-                                                            <div className="font-bold text-lg">Mercado Pago</div>
-                                                            <div className="text-xs text-blue-100">Tarjetas de crédito, débito y efectivo</div>
-                                                        </div>
-                                                    </div>
-                                                    {creatingPreference ? <Loader2 className="animate-spin" /> : <span className="font-bold text-xl">${(model.price * ARS_RATE).toLocaleString('es-AR')} ARS</span>}
-                                                </button>
-                                            ) : (
-                                                <a
-                                                    href={preferenceId}
-                                                    className="w-full flex items-center justify-between p-4 border-2 border-[#009EE3] bg-white hover:bg-blue-50 text-[#009EE3] rounded-lg transition-all shadow-md"
-                                                >
-                                                    <span className="font-bold">Continuar a Mercado Pago &rarr;</span>
-                                                </a>
-                                            )}
-                                        </div>
+                                        {model.price === 0 ? (
+                                            <button
+                                                onClick={() => handleDownload()} // Directly download if free
+                                                className="w-full flex items-center justify-center p-4 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all shadow-md font-bold text-lg"
+                                            >
+                                                Descargar Gratis
+                                            </button>
+                                        ) : (
+                                            <>
+                                                {/* Mercado Pago Button */}
+                                                <div className="relative">
+                                                    {!preferenceId ? (
+                                                        <button
+                                                            onClick={handleCreatePreference}
+                                                            disabled={creatingPreference}
+                                                            className="w-full flex items-center justify-between p-4 border-2 border-transparent bg-[#009EE3] hover:bg-[#008ED0] text-white rounded-lg transition-all shadow-md group"
+                                                        >
+                                                            <div className="flex items-center space-x-3">
+                                                                <div className="bg-white/20 p-2 rounded hidden sm:block">
+                                                                    <div className="w-6 h-6 flex items-center justify-center font-bold text-white text-xs">MP</div>
+                                                                </div>
+                                                                <div className="text-left">
+                                                                    <div className="font-bold text-lg">Mercado Pago</div>
+                                                                    <div className="text-xs text-blue-100 hidden sm:block">Tarjetas de crédito, débito y efectivo</div>
+                                                                </div>
+                                                            </div>
+                                                            {creatingPreference ? <Loader2 className="animate-spin" /> : <span className="font-bold text-lg sm:text-xl">${(model.price * ARS_RATE).toLocaleString('es-AR')} ARS</span>}
+                                                        </button>
+                                                    ) : (
+                                                        <a
+                                                            href={preferenceId}
+                                                            className="w-full flex items-center justify-between p-4 border-2 border-[#009EE3] bg-white hover:bg-blue-50 text-[#009EE3] rounded-lg transition-all shadow-md"
+                                                        >
+                                                            <span className="font-bold">Continuar a Mercado Pago &rarr;</span>
+                                                        </a>
+                                                    )}
+                                                </div>
 
-                                        {/* PayPal Button Container */}
-                                        <div className="relative bg-[#003087]/5 rounded-lg border border-[#003087]/20 p-1">
-                                            <PayPalScriptProvider options={{ clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || "test", currency: "USD" }}>
-                                                <PayPalButtons
-                                                    style={{ layout: "horizontal", color: "blue", height: 50, tagline: false, label: "pay" }}
-                                                    createOrder={(_data, actions) => {
-                                                        return actions.order.create({
-                                                            intent: "CAPTURE",
-                                                            purchase_units: [{
-                                                                amount: {
-                                                                    value: model.price.toString(),
-                                                                    currency_code: 'USD'
-                                                                }
-                                                            }]
-                                                        });
-                                                    }}
-                                                    onApprove={handlePayPalApprove}
-                                                />
-                                            </PayPalScriptProvider>
-                                        </div>
+                                                {/* PayPal Button Container */}
+                                                <div className="relative bg-[#003087]/5 rounded-lg border border-[#003087]/20 p-1">
+                                                    <PayPalScriptProvider options={{ clientId: import.meta.env.VITE_PAYPAL_CLIENT_ID || "test", currency: "USD" }}>
+                                                        <PayPalButtons
+                                                            style={{ layout: "horizontal", color: "blue", height: 50, tagline: false, label: "pay" }}
+                                                            createOrder={(_data, actions) => {
+                                                                return actions.order.create({
+                                                                    intent: "CAPTURE",
+                                                                    purchase_units: [{
+                                                                        amount: {
+                                                                            value: model.price.toString(),
+                                                                            currency_code: 'USD'
+                                                                        }
+                                                                    }]
+                                                                });
+                                                            }}
+                                                            onApprove={handlePayPalApprove}
+                                                        />
+                                                    </PayPalScriptProvider>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </div>
