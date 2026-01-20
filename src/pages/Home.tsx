@@ -18,7 +18,7 @@ export default function Home() {
                 <div className="relative z-10 text-center space-y-6 max-w-4xl px-4">
                     <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-black/50 border border-white/20 backdrop-blur-md text-sm text-gray-200 animate-in fade-in slide-in-from-bottom-4 duration-700">
                         <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-                        <span className="tracking-wide uppercase text-xs font-bold line-clamp-1">{t.home.hero_badge}</span>
+                        <span className="tracking-wide uppercase text-xs font-bold text-left whitespace-normal">{t.home.hero_badge}</span>
                     </div>
 
                     <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400 text-glow drop-shadow-2xl">
