@@ -7,77 +7,38 @@ export default function PaymentSuccess() {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
 
-    const [status, setStatus] = useState<'verifying' | 'success' | 'error'>('verifying');
-    const [signedUrl, setSignedUrl] = useState<string | null>(null);
-    const [message, setMessage] = useState('Verifying payment...');
+    const [filename, setFilename] = useState<string | null>(null);
 
-    const paymentId = searchParams.get('payment_id') || searchParams.get('collection_id');
-    const merchantOrder = searchParams.get('merchant_order_id');
-    const modelId = searchParams.get('model_id');
-    const paymentStatus = searchParams.get('payment_status') || searchParams.get('status') || searchParams.get('collection_status');
+    // ... (inside useEffect)
+    if (response.ok && result.success) {
+        setStatus('success');
+        setSignedUrl(result.signedUrl);
+        setFilename(result.filename); // Set filename
 
-    useEffect(() => {
-        const verify = async () => {
-            if (!modelId || paymentStatus !== 'approved') {
-                setStatus('error');
-                setMessage('Invalid payment parameters.');
-                return;
+        // Force persist in LocalStorage as backup
+        if (result.signedUrl) {
+            localStorage.setItem(`purchased_${modelId}`, result.signedUrl);
+        }
+
+        // Auto Download Attempt
+        setTimeout(() => {
+            if (result.signedUrl) {
+                const a = document.createElement('a');
+                a.href = result.signedUrl;
+                a.download = result.filename || `model_${modelId}.zip`; // Use specific filename
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
             }
-
-            try {
-                // CALL BACKEND VERIFICATION
-                const response = await fetch('/api/verify-payment', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        paymentId: paymentId || merchantOrder,
-                        modelId: modelId
-                    })
-                });
-
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    setStatus('success');
-                    setSignedUrl(result.signedUrl);
-
-                    // Force persist in LocalStorage as backup
-                    if (result.signedUrl) {
-                        localStorage.setItem(`purchased_${modelId}`, result.signedUrl);
-                    }
-
-                    // Auto Download Attempt
-                    setTimeout(() => {
-                        if (result.signedUrl) {
-                            const a = document.createElement('a');
-                            a.href = result.signedUrl;
-                            a.download = `model_${modelId}.zip`; // Generic name fallback
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                        }
-                    }, 1500);
-
-                } else {
-                    console.error("Verification failed", result);
-                    setStatus('error');
-                    setMessage('Payment verification failed. Please contact support.');
-                }
-            } catch (err) {
-                console.error(err);
-                setStatus('error');
-                setMessage('Server error verifying payment.');
-            }
-        };
-
-        verify();
-    }, [modelId, paymentId, merchantOrder, paymentStatus]);
+        }, 1500);
+    }
+    // ...
 
     const handleDownload = () => {
         if (signedUrl) {
             const a = document.createElement('a');
             a.href = signedUrl;
-            a.download = `model_${modelId}.zip`;
+            a.download = filename || `model_${modelId}.zip`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

@@ -106,6 +106,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(200).json({
             success: true,
             signedUrl: signData.signedUrl,
+            filename: model.file_path.split('/').pop(), // Extract filename
             message: 'Purchase verified and recorded'
         });
 
