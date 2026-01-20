@@ -7,7 +7,7 @@ export default function Home() {
     const { t } = useLanguage();
 
     return (
-    return (
+
         <div className="space-y-16 min-h-screen pb-20">
             {/* Futuristic Hero Section */}
             <section className="relative h-[500px] flex items-center justify-center overflow-hidden rounded-3xl mx-4 mt-4 glass border-white/5 shadow-2xl group">
