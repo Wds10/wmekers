@@ -4,18 +4,11 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import ThreeViewer from '../components/ThreeViewer';
-import { ShoppingCart, Download, User as UserIcon, ShoppingBag, Loader2 } from 'lucide-react';
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-
-// Initialize MP
-// const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY || 'TEST-00000000-0000-0000-0000-000000000000';
-// initMercadoPago(MP_PUBLIC_KEY, { locale: 'es-AR' });
-
-const ARS_RATE = 1200;
-
+import { ShoppingCart, User as UserIcon, ShoppingBag, Loader2 } from 'lucide-react';
+// ...
 export default function ProductDetail() {
     const { id } = useParams();
-    const [searchParams] = useSearchParams();
+    // const [searchParams] = useSearchParams();
     const { user, profile } = useAuth();
     const { t } = useLanguage();
     const [model, setModel] = useState<any>(null);
