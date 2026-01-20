@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Download, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Download, Loader2, CheckCircle, AlertTriangle, Package } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 export default function PaymentSuccess() {
     const [searchParams] = useSearchParams();
