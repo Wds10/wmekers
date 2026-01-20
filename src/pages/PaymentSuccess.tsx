@@ -200,6 +200,13 @@ export default function PaymentSuccess() {
 
                         <p className="text-gray-400 text-sm mt-4">El pago no pudo ser completado.</p>
                         <p className="text-xs text-gray-500 bg-black/20 p-2 rounded font-mono break-all">{message}</p>
+
+                        <button
+                            onClick={() => navigate(`/model/${modelId}`)}
+                            className="text-sm text-gray-400 hover:text-white underline mt-2 px-4 py-2"
+                        >
+                            Volver al producto
+                        </button>
                     </>
                 )}
 
