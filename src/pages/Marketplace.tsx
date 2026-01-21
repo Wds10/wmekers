@@ -4,6 +4,20 @@ import { supabase } from '../lib/supabase';
 import { Search, ShoppingBag } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
+const DEMO_MODELS = [
+    // Free Section (Pokemon / Plants)
+    { id: '1', title: 'Charizard (Dragón Fuego)', price: 0, category: 'Characters', preview_path: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png', profiles: { full_name: 'Nintendo Fan' } },
+    { id: '2', title: 'Mewtwo (Psíquico)', price: 0, category: 'Characters', preview_path: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png', profiles: { full_name: 'Legendary' } },
+    { id: '3', title: 'Groot (Baby)', price: 0, category: 'Characters', preview_path: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png', profiles: { full_name: 'Marvel Fan' } },
+    { id: '4', title: 'Pikachu (Eléctrico)', price: 0, category: 'Characters', preview_path: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png', profiles: { full_name: 'Ash K.' } },
+
+    // Premium Section (Robots / Cars / Heroes)
+    { id: '5', title: 'Optimus Prime (Líder)', price: 15, category: 'Vehicles', preview_path: 'https://images.unsplash.com/photo-1608270586620-25fd19606384?auto=format&fit=crop&w=500&q=80', profiles: { full_name: 'Cybertron' } },
+    { id: '6', title: 'Spider-Hero (Action Pose)', price: 12, category: 'Characters', preview_path: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=500&q=80', profiles: { full_name: 'Spidey' } },
+    { id: '7', title: 'Caballero Z (Pegaso)', price: 20, category: 'Characters', preview_path: 'https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80', profiles: { full_name: 'Cosmo' } },
+    { id: '8', title: 'Cyber Sport Car 2077', price: 25, category: 'Vehicles', preview_path: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=500&q=80', profiles: { full_name: 'Racer X' } }
+];
+
 
 
 export default function Marketplace() {
@@ -26,8 +40,16 @@ export default function Marketplace() {
             .select('*, profiles(full_name)');
 
         const { data, error } = await query;
-        if (error) console.error(error);
-        else setModels(data || []);
+        if (error) {
+            console.error(error);
+        } else {
+            // Include Demo Models if DB is empty to satisfy user request for specific "Objects"
+            if (!data || data.length === 0) {
+                setModels(DEMO_MODELS);
+            } else {
+                setModels(data);
+            }
+        }
 
         setLoading(false);
     };
