@@ -125,18 +125,18 @@ const translations: Translations = {
             download_ready: 'Tu archivo está listo para descargar.'
         },
         home: {
-            hero_badge: 'El Mercado #1 de Activos 3D',
-            hero_title_1: 'Descubre y Vende',
-            hero_title_2: 'Modelos 3D Premium',
-            hero_desc: 'Únete a la comunidad de creadores. Compra y vende archivos STL, OBJ y FBX de alta calidad.',
-            btn_explore: 'Explorar Modelos',
-            btn_creator: 'Ser Creador',
+            hero_badge: 'El Mercado #1 de Activos 3D & STL',
+            hero_title_1: 'Tu Mercado de Modelos',
+            hero_title_2: '3D Premium & Archivos STL',
+            hero_desc: 'Descarga GRATIS miles de modelos. Compre archivos STL premium a precios accesibles. Imprima en 3D hoy mismo.',
+            btn_explore: 'Explorar Descargas GRATIS',
+            btn_creator: 'Comprar STL Baratos',
             feat_quality_title: 'Activos de Alta Calidad',
-            feat_quality_desc: 'Colección curada de modelos 3D listos para producción e impresión.',
+            feat_quality_desc: 'Calidad de estudio garantizada. Modelos verificados para impresión sin errores.',
             feat_secure_title: 'Transacciones Seguras',
-            feat_secure_desc: 'Pagos seguros vía PayPal y Mercado Pago (Argentina).',
+            feat_secure_desc: 'Plataforma protegida con pagos encriptados locales e internacionales.',
             feat_instant_title: 'Descargas Instantáneas',
-            feat_instant_desc: 'Acceso inmediato a tus archivos con enlaces seguros y permanentes.'
+            feat_instant_desc: 'Acceso inmediato a tu biblioteca digital. Tus archivos, para siempre.'
         },
         payment: {
             title_arg: 'Pago en Argentina (Mercado Pago)',
