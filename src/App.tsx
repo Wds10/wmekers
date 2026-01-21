@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import Admin from './pages/Admin';
 
 import PaymentSuccess from './pages/PaymentSuccess';
+import ImportModels from './pages/ImportModels';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/import" element={<ImportModels />} />
               <Route path="/payment-success" element={<PaymentSuccess />} />
             </Routes>
           </Layout>

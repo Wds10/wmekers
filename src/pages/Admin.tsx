@@ -160,6 +160,16 @@ export default function Admin() {
                 </div>
             </div>
 
+            <div className="flex justify-end mb-6">
+                <button
+                    onClick={() => window.location.href = '/admin/import'}
+                    className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg flex items-center space-x-2 transition-colors shadow-lg shadow-purple-500/20"
+                >
+                    <Box className="w-5 h-5" />
+                    <span>Import Tools</span>
+                </button>
+            </div>
+
             <div className="flex space-x-4 mb-8 border-b border-white/10 pb-4 overflow-x-auto">
                 <button
                     onClick={() => setActiveTab('users')}
