@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { ArrowRight, Box, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Box, ShieldCheck, Zap } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function Home() {
@@ -56,46 +56,66 @@ export default function Home() {
             </section>
 
             {/* "Spotify-style" Categories/Features */}
-            <section className="px-4">
-                <div className="flex items-center justify-between mb-8">
-                    <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                        <span className="w-1 h-8 bg-primary rounded-full"></span>
-                        Why W3D Market?
-                    </h2>
-                </div>
+            {/* Features Section with Side Characters */}
+            <section className="relative z-10 py-20 px-4 w-full overflow-hidden">
+                <div className="max-w-[1800px] mx-auto grid grid-cols-1 xl:grid-cols-[1fr_2fr_1fr] gap-8 items-center">
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="glass-card p-8 rounded-2xl group cursor-pointer relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                            <Box size={120} />
-                        </div>
-                        <div className="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(131,0,233,0.3)]">
-                            <Box size={28} />
-                        </div>
-                        <h3 className="text-xl font-bold mb-2 text-white">{t.home.feat_quality_title}</h3>
-                        <p className="text-muted leading-relaxed">{t.home.feat_quality_desc}</p>
+                    {/* LEFT SIDE CHARACTERS (Hidden on mobile) */}
+                    <div className="hidden xl:flex flex-col gap-12 items-center p-4 animate-in slide-in-from-left duration-1000">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png" className="w-48 h-48 object-contain drop-shadow-[0_0_20px_rgba(234,179,8,0.5)] animate-float-slow hover:scale-110 transition-transform" alt="Charizard" />
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png" className="w-56 h-56 object-contain drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] animate-float-medium hover:scale-110 transition-transform" alt="Mewtwo" />
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" className="w-32 h-32 object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.5)] animate-float-fast hover:scale-110 transition-transform" alt="Groot" />
                     </div>
 
-                    <div className="glass-card p-8 rounded-2xl group cursor-pointer relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                            <ShieldCheck size={120} />
+                    {/* CENTER FEATURES (Original Content) */}
+                    <div className="max-w-4xl mx-auto space-y-12">
+                        <div className="text-center space-y-4">
+                            <h2 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+                                ¿Por qué W3D Market?
+                            </h2>
+                            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+                                La plataforma definitiva para tus necesidades de impresión 3D.
+                            </p>
                         </div>
-                        <div className="w-14 h-14 bg-secondary/20 rounded-full flex items-center justify-center mb-6 text-secondary group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(0,210,255,0.3)]">
-                            <ShieldCheck size={28} />
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {[
+                                {
+                                    icon: <Box className="text-secondary" size={32} />,
+                                    title: t.home.feat_quality_title,
+                                    desc: t.home.feat_quality_desc,
+                                    color: "from-secondary/20 to-purple-900/20"
+                                },
+                                {
+                                    icon: <ShieldCheck className="text-blue-400" size={32} />,
+                                    title: t.home.feat_secure_title,
+                                    desc: t.home.feat_secure_desc,
+                                    color: "from-blue-500/20 to-cyan-900/20"
+                                },
+                                {
+                                    icon: <Zap className="text-green-400" size={32} />,
+                                    title: t.home.feat_instant_title,
+                                    desc: t.home.feat_instant_desc,
+                                    color: "from-green-500/20 to-emerald-900/20"
+                                }
+                            ].map((feature, i) => (
+                                <div key={i} className={`p-6 rounded-2xl bg-gradient-to-br ${feature.color} border border-white/10 backdrop-blur-sm hover:translate-y-[-5px] transition-all duration-300 group`}>
+                                    <div className="mb-4 p-3 bg-black/40 rounded-xl w-fit group-hover:scale-110 transition-transform duration-300 border border-white/5">
+                                        {feature.icon}
+                                    </div>
+                                    <h3 className="text-xl font-bold mb-2 text-gray-100">{feature.title}</h3>
+                                    <p className="text-gray-400 leading-relaxed text-sm">
+                                        {feature.desc}
+                                    </p>
+                                </div>
+                            ))}
                         </div>
-                        <h3 className="text-xl font-bold mb-2 text-white">{t.home.feat_secure_title}</h3>
-                        <p className="text-muted leading-relaxed">{t.home.feat_secure_desc}</p>
                     </div>
 
-                    <div className="glass-card p-8 rounded-2xl group cursor-pointer relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                            <Box size={120} />
-                        </div>
-                        <div className="w-14 h-14 bg-accent/20 rounded-full flex items-center justify-center mb-6 text-accent group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(29,185,84,0.3)]">
-                            <Box size={28} />
-                        </div>
-                        <h3 className="text-xl font-bold mb-2 text-white">{t.home.feat_instant_title}</h3>
-                        <p className="text-muted leading-relaxed">{t.home.feat_instant_desc}</p>
+                    {/* RIGHT SIDE CHARACTERS (Hidden on mobile) */}
+                    <div className="hidden xl:flex flex-col gap-12 items-center p-4 animate-in slide-in-from-right duration-1000">
+                        <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=500&q=80" className="w-56 h-56 object-contain drop-shadow-[0_0_20px_rgba(239,68,68,0.5)] animate-float-medium hover:scale-110 transition-transform" alt="Spiderman" />
+                        <img src="https://images.unsplash.com/photo-1608270586620-25fd19606384?auto=format&fit=crop&w=500&q=80" className="w-48 h-48 object-contain drop-shadow-[0_0_20px_rgba(59,130,246,0.5)] animate-float-slow hover:scale-110 transition-transform" alt="Optimus" />
+                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=500&q=80" className="w-64 h-32 object-contain drop-shadow-[0_0_20px_rgba(236,72,153,0.5)] animate-float-fast hover:scale-110 transition-transform" alt="Car" />
                     </div>
                 </div>
             </section>
