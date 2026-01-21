@@ -118,7 +118,8 @@ export default function PaymentSuccess() {
         }
     }, [modelId, paymentId, merchantOrder, paymentStatus]);
 
-    const handleDownload = () => {
+    const handleDownload = (e?: any) => {
+        if (e) e.preventDefault();
         if (signedUrl) {
             const a = document.createElement('a');
             a.href = signedUrl;
@@ -126,6 +127,8 @@ export default function PaymentSuccess() {
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+        } else {
+            alert('Atención: El pago fue exitoso, pero hubo un error generando el enlace de descarga automática.\n\nPor favor, contáctanos indicando tu ID de pago: ' + (paymentId || 'N/A') + ' para enviarte el archivo manualmente.');
         }
     };
 
@@ -171,27 +174,21 @@ export default function PaymentSuccess() {
                         )}
 
                         {/* LITERAL REQUEST: "Botón: Descargar archivo" */}
+                        <button
+                            onClick={handleDownload}
+                            className="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
+                        >
+                            <Download size={24} />
+                            <span>Descargar archivo</span>
+                        </button>
+
                         {signedUrl ? (
-                            <>
-                                <button
-                                    onClick={handleDownload}
-                                    className="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
-                                >
-                                    <Download size={24} />
-                                    <span>Descargar archivo</span>
-                                </button>
-                                <div className="text-sm text-gray-500 mt-2">
-                                    Si la descarga no comienza automáticamente, haz clic en el botón.
-                                </div>
-                            </>
+                            <div className="text-sm text-gray-500 mt-2">
+                                Si la descarga no comienza automáticamente, haz clic en el botón.
+                            </div>
                         ) : (
-                            <div className="bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-xl text-yellow-200 text-sm">
-                                <p className="font-bold flex items-center gap-2 mb-1">
-                                    <AlertTriangle size={16} />
-                                    Atención
-                                </p>
-                                <p>{message || "Hubo un problema generando el archivo. Por favor contáctanos con tu comprobante."}</p>
-                                <p className="mt-2 text-xs font-mono opacity-70">ID: {paymentId}</p>
+                            <div className="text-xs text-yellow-500 mt-3 p-2 bg-yellow-500/10 rounded border border-yellow-500/20">
+                                ⚠ {message || "Error al generar enlace. Contacte soporte."}
                             </div>
                         )}
 
