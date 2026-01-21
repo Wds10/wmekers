@@ -25,7 +25,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { paymentId, modelId } = req.body;
+    let { paymentId, modelId } = req.body;
+
+    // Robust parsing for Vercel/Serverless explicitly
+    if (typeof req.body === 'string') {
+        try {
+            const parsed = JSON.parse(req.body);
+            paymentId = parsed.paymentId;
+            modelId = parsed.modelId;
+        } catch (e) {
+            console.error("Failed to parse body string", e);
+        }
+    }
 
     if (!paymentId || !modelId) {
         return res.status(400).json({ error: 'Missing paymentId or modelId' });

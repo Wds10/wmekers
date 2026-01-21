@@ -38,18 +38,19 @@ export default function PaymentSuccess() {
             // Check implicit status from URL first
             if (paymentStatus === 'failure' || paymentStatus === 'rejected') {
                 setStatus('rejected');
-                setMessage('El pago fue rechazado.');
+                setMessage('El pago fue rechazado. Intenta con otro medio de pago.');
                 return;
             }
 
             // Only proceed if we have a payment ID to verify
             if (!paymentId && !merchantOrder) {
+                // If the user manually navigated here without params, it's not strictly an error, but we can't show success.
+                // If model params are missing, just show basic state.
                 setStatus('rejected');
                 setMessage('No se encontró información del pago.');
                 return;
             }
 
-            // If explicit "approved" or likely success, verify with backend
             try {
                 // CALL BACKEND VERIFICATION
                 const response = await fetch('/api/verify-payment', {
@@ -87,13 +88,28 @@ export default function PaymentSuccess() {
 
                 } else {
                     console.error("Verification failed", result);
-                    setStatus('rejected');
-                    setMessage(result.error || 'Verificación de pago fallida.');
+
+                    // CRITICAL FIX: If URL says approved, but backend failed (e.g. config error), 
+                    // DO NOT show "Rejected" UI to the user. Show "Approved with Error".
+                    if (paymentStatus === 'approved') {
+                        setStatus('approved');
+                        setMessage(result.error || 'Pago exitoso, pero hubo un error generando el enlace.');
+                        // Note: signedUrl will be null, so button won't show or logic handles it.
+                    } else {
+                        setStatus('rejected');
+                        setMessage(result.error || 'Verificación de pago fallida.');
+                    }
                 }
             } catch (err) {
                 console.error(err);
-                setStatus('rejected');
-                setMessage('Error del servidor verificando el pago.');
+                // Same logic for network errors
+                if (paymentStatus === 'approved') {
+                    setStatus('approved');
+                    setMessage('Pago exitoso. Error de conexión al generar descarga. Contáctanos.');
+                } else {
+                    setStatus('rejected');
+                    setMessage('Error del servidor verificando el pago.');
+                }
             }
         };
 
