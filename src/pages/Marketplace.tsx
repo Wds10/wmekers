@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+}import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { Search, ShoppingBag } from 'lucide-react';
@@ -106,7 +106,10 @@ export default function Marketplace() {
                             <div className="aspect-[4/3] bg-black/50 relative overflow-hidden">
                                 {model.preview_path ? (
                                     <img
-                                        src={`${supabase.storage.from('previews').getPublicUrl(model.preview_path).data.publicUrl}?t=${new Date().getTime()}`}
+                                        src={model.preview_path?.startsWith('http')
+                                            ? model.preview_path
+                                            : `${supabase.storage.from('previews').getPublicUrl(model.preview_path).data.publicUrl}?t=${new Date().getTime()}`
+                                        }
                                         alt={model.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                     />

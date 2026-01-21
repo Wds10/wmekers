@@ -190,12 +190,14 @@ export default function ProductDetail() {
     };
 
     const handleDownload = async (overriddenUrl?: string) => {
-        const targetUrl = overriddenUrl || signedUrl;
+        // Use source_url for imported models if available
+        const targetUrl = overriddenUrl || (model.is_imported && model.source_url ? model.source_url : signedUrl);
 
         if (targetUrl) {
             const a = document.createElement('a');
             a.href = targetUrl;
-            a.download = model.file_path.split('/').pop() || 'model.stl';
+            // Use specific name or extract from URL
+            a.download = model.file_path?.split('/').pop() || 'model.stl';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -237,7 +239,13 @@ export default function ProductDetail() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Viewer Section */}
             <div className="h-[350px] lg:h-[600px] sticky top-24">
-                {signedUrl ? (
+                {model.preview_path?.startsWith('http') ? (
+                    <img
+                        src={model.preview_path}
+                        alt={model.title}
+                        className="w-full h-full object-cover rounded-xl shadow-2xl border border-white/10"
+                    />
+                ) : signedUrl ? (
                     <ThreeViewer url={signedUrl} filename={model.file_path} />
                 ) : (
                     <div className="w-full h-full bg-surface rounded-xl flex items-center justify-center text-gray-500 flex-col gap-4">
