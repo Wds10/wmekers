@@ -1,7 +1,6 @@
-
 import { createClient } from '@supabase/supabase-js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import fetch from 'node-fetch'; // Vercel environment usually has fetch global, but explicit import if needed. Using global fetch.
+// import fetch from 'node-fetch'; // Global fetch is available in Vercel Node 18+
 
 // Initialize Supabase Admin
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://gyyvbyynogdkbayslptg.supabase.co';
