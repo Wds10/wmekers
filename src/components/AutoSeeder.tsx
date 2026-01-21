@@ -1,6 +1,7 @@
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../context/AuthContext';
 
 const POKEMONS = [
     { id: 25, name: 'Pikachu', file: 'LCD-knob.stl' },
@@ -16,52 +17,64 @@ const POKEMONS = [
 ];
 
 export function AutoSeeder() {
+    const { user, loading } = useAuth();
+    const hasRun = useRef(false);
+
     useEffect(() => {
+        if (loading || !user || hasRun.current) return;
+
         const seed = async () => {
+            hasRun.current = true; // Prevent double execution
             console.log("AutoSeeder: Checking...");
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) {
-                console.log("AutoSeeder: No user logged in. Skipping.");
-                return;
-            }
 
             // Check if Pokemon already exist
-            const { count } = await supabase.from('models')
-                .select('*', { count: 'exact', head: true })
-                .eq('category', 'Characters') // Assuming Pokemon are in this category
-                .ilike('title', '%Low Poly%');
+            try {
+                const { count } = await supabase.from('models')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('category', 'Characters')
+                    .ilike('title', '%Low Poly%');
 
-            if (count && count >= 10) {
-                console.log("AutoSeeder: Pokemon already exist.");
-                return;
-            }
+                if (count !== null && count >= 10) {
+                    console.log("AutoSeeder: Pokemon already exist.");
+                    return;
+                }
 
-            console.log("AutoSeeder: Seeding...");
+                // User Feedback
+                const confirmSeed = window.confirm("System: Database seems empty (missing Pokemon). Do you want to auto-generate the 10 Pokemon test models now?");
+                if (!confirmSeed) return;
 
-            const products = POKEMONS.map((p) => ({
-                seller_id: user.id,
-                title: `${p.name} (Low Poly)`,
-                description: `A 3D printable model of ${p.name}. Perfect for testing the download system. (Note: Geometry uses a placeholder/demo STL file for reliable download testing).`,
-                price: 0,
-                preview_path: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png`,
-                source_url: `https://raw.githubusercontent.com/prusa3d/Original-Prusa-i3/MK3S/Printed-Parts/STL/${p.file}`,
-                file_path: 'external',
-                author_original: 'Nintendo / GameFreak (Fan Art)',
-                license_type: 'CC-BY-NC',
-                is_imported: true,
-                category: 'Characters'
-            }));
+                console.log("AutoSeeder: Seeding...");
 
-            const { error } = await supabase.from('models').insert(products);
-            if (error) console.error("AutoSeeder Error:", error);
-            else {
-                console.log("AutoSeeder: Success! Reloading page...");
-                window.location.reload();
+                const products = POKEMONS.map((p) => ({
+                    seller_id: user.id,
+                    title: `${p.name} (Low Poly)`,
+                    description: `A 3D printable model of ${p.name}. Perfect for testing the download system. (Note: Geometry uses a placeholder/demo STL file for reliable download testing).`,
+                    price: 0,
+                    preview_path: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png`,
+                    source_url: `https://raw.githubusercontent.com/prusa3d/Original-Prusa-i3/MK3S/Printed-Parts/STL/${p.file}`,
+                    file_path: 'external',
+                    author_original: 'Nintendo / GameFreak (Fan Art)',
+                    license_type: 'CC-BY-NC',
+                    is_imported: true,
+                    category: 'Characters'
+                }));
+
+                const { error } = await supabase.from('models').insert(products);
+
+                if (error) {
+                    console.error("AutoSeeder Error:", error);
+                    alert("Auto-Seeder Failed: " + error.message);
+                } else {
+                    alert("Success! 10 Pokemon Models have been generated. The page will now reload.");
+                    window.location.reload();
+                }
+            } catch (err) {
+                console.error("AutoSeeder Check Error:", err);
             }
         };
 
         seed();
-    }, []);
+    }, [user, loading]);
 
-    return null; // Invisible component
+    return null;
 }
