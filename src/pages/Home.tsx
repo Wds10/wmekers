@@ -35,9 +35,7 @@ export default function Home() {
                             <span>{t.home.btn_explore}</span>
                             <ArrowRight size={20} />
                         </Link>
-                        <Link to="/register" className="px-10 py-5 glass text-white rounded-full font-bold hover:bg-white/10 hover:border-white/30 transition-all">
-                            {t.home.btn_creator}
-                        </Link>
+
                     </div>
                 </div>
             </section>

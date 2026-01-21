@@ -13,6 +13,7 @@ import Admin from './pages/Admin';
 
 import PaymentSuccess from './pages/PaymentSuccess';
 import ImportModels from './pages/ImportModels';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 function App() {
   return (
@@ -20,18 +21,20 @@ function App() {
       <AuthProvider>
         <Router>
           <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/market" element={<Marketplace />} />
-              <Route path="/model/:id" element={<ProductDetail />} />
-              <Route path="/upload" element={<UploadPage />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/admin/import" element={<ImportModels />} />
-              <Route path="/payment-success" element={<PaymentSuccess />} />
-            </Routes>
+            <ErrorBoundary>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/market" element={<Marketplace />} />
+                <Route path="/model/:id" element={<ProductDetail />} />
+                <Route path="/upload" element={<UploadPage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/admin/import" element={<ImportModels />} />
+                <Route path="/payment-success" element={<PaymentSuccess />} />
+              </Routes>
+            </ErrorBoundary>
           </Layout>
         </Router>
       </AuthProvider>

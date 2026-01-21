@@ -8,7 +8,7 @@ import { FBXLoader } from 'three-stdlib';
 import { Loader2 } from 'lucide-react';
 
 function Model({ url, filename }: { url: string; filename: string }) {
-    const extension = filename.split('.').pop()?.toLowerCase();
+    const extension = (filename || 'model.glb').split('.').pop()?.toLowerCase();
 
     // GLTF/GLB
     if (extension === 'gltf' || extension === 'glb') {

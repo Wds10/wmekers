@@ -4,18 +4,7 @@ import { supabase } from '../lib/supabase';
 import { Search, ShoppingBag } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
-const POKEMONS = [
-    { id: 25, name: 'Pikachu', file: 'LCD-knob.stl' },
-    { id: 1, name: 'Bulbasaur', file: 'Spool-holder.stl' },
-    { id: 4, name: 'Charmander', file: 'y-motor-holder.stl' },
-    { id: 7, name: 'Squirtle', file: 'x-end-motor.stl' },
-    { id: 39, name: 'Jigglypuff', file: 'x-end-idler.stl' },
-    { id: 52, name: 'Meowth', file: 'extruder-body.stl' },
-    { id: 54, name: 'Psyduck', file: 'extruder-cover.stl' },
-    { id: 94, name: 'Gengar', file: 'extruder-idler.stl' },
-    { id: 133, name: 'Eevee', file: 'print-fan-support.stl' },
-    { id: 143, name: 'Snorlax', file: 'extruder-body.stl' }
-];
+
 
 export default function Marketplace() {
     const { t } = useLanguage();
@@ -24,7 +13,24 @@ export default function Marketplace() {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('All');
 
-    const categories = ['Characters', 'Vehicles', 'Environment', 'Props', 'Animals', 'Weapons'];
+    // Safe access to categories
+    const cats = (t.marketplace as any)?.categories || {
+        all: 'All', characters: 'Characters', vehicles: 'Vehículos', props: 'Props', art: 'Art'
+    };
+
+    // Map internal IDs to Display Names
+    const categoryMap: { [key: string]: string } = {
+        'All': cats.all,
+        'Characters': cats.characters,
+        'Vehicles': cats.vehicles,
+        'Props': cats.props,
+        'Art': cats.art,
+        'Environment': 'Environment', // Fallbacks
+        'Animals': 'Animals',
+        'Weapons': 'Weapons'
+    };
+
+    const categories = ['All', 'Characters', 'Vehicles', 'Props', 'Art'];
 
     useEffect(() => {
         fetchModels();
@@ -52,49 +58,11 @@ export default function Marketplace() {
     };
 
     const handleGenerateData = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-            // Redirect to login if needed, or just return. 
-            // User asked for "no messages", but if they aren't logged in, it won't work.
-            // I'll assume they are logged in as per previous turn instructions.
-            window.location.href = '/login';
-            return;
-        }
-
-        // REMOVED CONFIRMATION
-        setLoading(true); // Show loading state
-
-        try {
-            const products = POKEMONS.map((p) => ({
-                seller_id: user.id,
-                title: p.name, // Simplified title
-                description: `A 3D printable model of ${p.name}.`,
-                price: 0,
-                preview_path: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png`,
-                source_url: `https://raw.githubusercontent.com/prusa3d/Original-Prusa-i3/MK3S/Printed-Parts/STL/${p.file}`,
-                file_path: 'external',
-                author_original: 'Nintendo (Fan Art)',
-                license_type: 'CC-BY-NC',
-                is_imported: true,
-                category: 'Characters'
-            }));
-
-            const { error } = await supabase.from('models').insert(products);
-
-            if (error) {
-                console.error(error);
-                setLoading(false);
-            } else {
-                window.location.reload();
-            }
-        } catch (e: any) {
-            console.error(e);
-            setLoading(false);
-        }
+        // Disabled
     };
 
     const filteredModels = models.filter(
-        model => model.title.toLowerCase().includes(searchTerm.toLowerCase())
+        model => (model.title || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -144,7 +112,7 @@ export default function Marketplace() {
                                     : 'bg-surface border border-white/10 text-gray-400 hover:text-white'
                                     }`}
                             >
-                                {cat}
+                                {categoryMap[cat] || cat}
                             </button>
                         ))}
                     </div>

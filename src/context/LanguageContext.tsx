@@ -13,6 +13,15 @@ type Translations = {
             admin: string;
             signout: string;
         };
+        marketplace: {
+            categories: {
+                all: string;
+                characters: string;
+                vehicles: string;
+                props: string;
+                art: string;
+            };
+        };
         auth: {
             welcome: string;
             email: string;
@@ -77,6 +86,15 @@ const translations: Translations = {
             admin: 'Panel Admin',
             signout: 'Cerrar Sesión'
         },
+        marketplace: {
+            categories: {
+                all: 'Todos',
+                characters: 'Personajes',
+                vehicles: 'Vehículos',
+                props: 'Utilería',
+                art: 'Arte'
+            }
+        },
         auth: {
             welcome: 'Bienvenido',
             email: 'Correo Electrónico',
@@ -105,7 +123,7 @@ const translations: Translations = {
             hero_title_1: 'Descubre y Vende',
             hero_title_2: 'Modelos 3D Premium',
             hero_desc: 'Únete a la comunidad de creadores. Compra y vende archivos STL, OBJ y FBX de alta calidad.',
-            btn_explore: 'Explorar Mercado',
+            btn_explore: 'Explorar Modelos',
             btn_creator: 'Ser Creador',
             feat_quality_title: 'Activos de Alta Calidad',
             feat_quality_desc: 'Colección curada de modelos 3D listos para producción e impresión.',
@@ -138,6 +156,15 @@ const translations: Translations = {
             admin: 'Admin Panel',
             signout: 'Sign Out'
         },
+        marketplace: {
+            categories: {
+                all: 'All',
+                characters: 'Characters',
+                vehicles: 'Vehicles',
+                props: 'Props',
+                art: 'Art'
+            }
+        },
         auth: {
             welcome: 'Welcome Back',
             email: 'Email Address',
@@ -166,7 +193,7 @@ const translations: Translations = {
             hero_title_1: 'Discover & Sell',
             hero_title_2: 'Premium 3D Models',
             hero_desc: 'Join the community of creators. Buy and sell high-quality STL, OBJ, and FBX files for printing, gaming, and visualization.',
-            btn_explore: 'Explore Marketplace',
+            btn_explore: 'Explore Models',
             btn_creator: 'Become a Creator',
             feat_quality_title: 'High Quality Assets',
             feat_quality_desc: 'Curated collection of 3D models ready for production, printing, or rendering.',
