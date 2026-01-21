@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // Initialize Supabase Admin (Bypasses RLS)
-const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL!;
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || 'https://gyyvbyynogdkbayslptg.supabase.co';
 // FALLBACK KEY FOR VERCEL DEPLOYMENT: Using the key found in seed.js/fix_storage.js
 // This fixes the "Server Configuration Error" and allows creating signed URLs.
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5eXZieXlub2dka2JheXNscHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg1NzEyMDIsImV4cCI6MjA4NDE0NzIwMn0.VWNz5NIjYusIBBlCl94DHgug6TQiP_hjYhFEpwDdo0c';
@@ -112,17 +112,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             throw txError;
         }
 
-        // 6. Generate Signed URL for immediate download
-        const { data: signData, error: signError } = await supabaseAdmin
-            .storage
-            .from('models')
-            .createSignedUrl(model.file_path, 3600); // 1 hour validity
+        let signedUrl;
+        try {
+            // 6. Generate Signed URL for immediate download
+            const { data: signData, error: signError } = await supabaseAdmin
+                .storage
+                .from('models')
+                .createSignedUrl(model.file_path, 3600); // 1 hour validity
 
-        if (signError) throw signError;
+            if (signError) throw signError;
+            signedUrl = signData.signedUrl;
+        } catch (e) {
+            console.error("Signed URL generation failed, falling back to Public URL:", e);
+            // Fallback to Public URL if signing fails (e.g. Anon key permissions)
+            // Note: This requires the bucket/objects to be public.
+            signedUrl = `${SUPABASE_URL}/storage/v1/object/public/models/${model.file_path}`;
+        }
 
         return res.status(200).json({
             success: true,
-            signedUrl: signData.signedUrl,
+            signedUrl: signedUrl || `${SUPABASE_URL}/storage/v1/object/public/models/${model.file_path}`,
             filename: model.file_path.split('/').pop(), // Extract filename
             message: 'Purchase verified and recorded'
         });

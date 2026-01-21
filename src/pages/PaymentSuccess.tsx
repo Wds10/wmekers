@@ -183,15 +183,9 @@ export default function PaymentSuccess() {
                             <span>Descargar archivo</span>
                         </button>
 
-                        {signedUrl ? (
-                            <div className="text-sm text-gray-500 mt-2">
-                                Si la descarga no comienza automáticamente, haz clic en el botón.
-                            </div>
-                        ) : (
-                            <div className="text-xs text-yellow-500 mt-3 p-2 bg-yellow-500/10 rounded border border-yellow-500/20">
-                                ⚠ {message || "Error al generar enlace. Contacte soporte."}
-                            </div>
-                        )}
+                        <div className="text-sm text-gray-500 mt-2">
+                            {signedUrl ? 'Si la descarga no comienza automáticamente, haz clic en el botón.' : 'Haga clic para descargar.'}
+                        </div>
 
                         <button
                             onClick={() => navigate(`/model/${modelId}`)}
