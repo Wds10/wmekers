@@ -13,13 +13,11 @@ import Admin from './pages/Admin';
 
 import PaymentSuccess from './pages/PaymentSuccess';
 import ImportModels from './pages/ImportModels';
-import { AutoSeeder } from './components/AutoSeeder';
 
 function App() {
   return (
     <LanguageProvider>
       <AuthProvider>
-        <AutoSeeder />
         <Router>
           <Layout>
             <Routes>

@@ -4,6 +4,19 @@ import { supabase } from '../lib/supabase';
 import { Search, ShoppingBag } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
+const POKEMONS = [
+    { id: 25, name: 'Pikachu', file: 'LCD-knob.stl' },
+    { id: 1, name: 'Bulbasaur', file: 'Spool-holder.stl' },
+    { id: 4, name: 'Charmander', file: 'y-motor-holder.stl' },
+    { id: 7, name: 'Squirtle', file: 'x-end-motor.stl' },
+    { id: 39, name: 'Jigglypuff', file: 'x-end-idler.stl' },
+    { id: 52, name: 'Meowth', file: 'extruder-body.stl' },
+    { id: 54, name: 'Psyduck', file: 'extruder-cover.stl' },
+    { id: 94, name: 'Gengar', file: 'extruder-idler.stl' },
+    { id: 133, name: 'Eevee', file: 'print-fan-support.stl' },
+    { id: 143, name: 'Snorlax', file: 'extruder-body.stl' }
+];
+
 export default function Marketplace() {
     const { t } = useLanguage();
     const [models, setModels] = useState<any[]>([]);
@@ -36,6 +49,45 @@ export default function Marketplace() {
         else setModels(data || []);
 
         setLoading(false);
+    };
+
+    const handleGenerateData = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            alert("ERROR: You must be logged in to generate data. Please Go to /login and try again.");
+            return;
+        }
+
+        const confirm = window.confirm("Generate 10 Pokemon Models now? This will insert data into your database.");
+        if (!confirm) return;
+
+        try {
+            const products = POKEMONS.map((p) => ({
+                seller_id: user.id,
+                title: `${p.name} (Low Poly)`,
+                description: `A 3D printable model of ${p.name}. Perfect for testing the download system.`,
+                price: 0,
+                preview_path: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png`,
+                source_url: `https://raw.githubusercontent.com/prusa3d/Original-Prusa-i3/MK3S/Printed-Parts/STL/${p.file}`,
+                file_path: 'external',
+                author_original: 'Nintendo / GameFreak (Fan Art)',
+                license_type: 'CC-BY-NC',
+                is_imported: true,
+                category: 'Characters'
+            }));
+
+            const { error } = await supabase.from('models').insert(products);
+
+            if (error) {
+                alert(`GENERATION FAILED: ${error.message}\nHint: ${error.hint || 'Check RLS Policies'}`);
+                console.error(error);
+            } else {
+                alert("SUCCESS! 10 Models Generated. Refreshing...");
+                window.location.reload();
+            }
+        } catch (e: any) {
+            alert("UNEXPECTED ERROR: " + e.message);
+        }
     };
 
     const filteredModels = models.filter(
@@ -96,9 +148,23 @@ export default function Marketplace() {
                 </div>
             </div>
 
-            {/* Grid */}
+            {/* Grid or Empty State */}
             {loading ? (
                 <div className="text-center py-20">Loading...</div>
+            ) : filteredModels.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-20 bg-surface/50 rounded-2xl border border-dashed border-white/10">
+                    <ShoppingBag size={64} className="text-gray-600 mb-6" />
+                    <h3 className="text-xl font-bold text-gray-400 mb-2">Marketplace is Empty</h3>
+                    <p className="text-gray-500 mb-8 max-w-md text-center">There are no models available yet. Log in as an admin to generate test data.</p>
+
+                    <button
+                        onClick={handleGenerateData}
+                        className="px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-lg hover:shadow-green-500/20 transition-all flex items-center gap-3 animate-pulse"
+                    >
+                        <ShoppingBag size={24} />
+                        <span>GENERATE DEMO DATA (10 POKEMON)</span>
+                    </button>
+                </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {filteredModels.map((model) => (
@@ -106,7 +172,7 @@ export default function Marketplace() {
                             <div className="aspect-[4/3] bg-black/50 relative overflow-hidden">
                                 {model.preview_path ? (
                                     <img
-                                        src={model.preview_path?.startsWith('http')
+                                        src={model.preview_path.startsWith('http')
                                             ? model.preview_path
                                             : `${supabase.storage.from('previews').getPublicUrl(model.preview_path).data.publicUrl}?t=${new Date().getTime()}`
                                         }
