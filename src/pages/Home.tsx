@@ -15,18 +15,18 @@ export default function Home() {
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-black to-secondary/40 opacity-80 group-hover:scale-105 transition-transform duration-[2s]" />
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
 
-                <div className="absolute top-10 right-10 w-64 h-64 md:w-96 md:h-96 opacity-80 animate-float-slow pointer-events-none z-0">
+                <div className="absolute top-10 left-[-50px] md:left-10 w-72 h-72 md:w-[500px] md:h-[500px] opacity-100 animate-float-slow pointer-events-none z-0">
                     <img
                         src="https://images.unsplash.com/photo-1541434969-92c2b37aa0a5?q=80&w=1000&auto=format&fit=crop"
                         alt="3D Spaceship"
-                        className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(59,130,246,0.5)] mask-image-gradient"
+                        className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(168,85,247,0.5)] mask-image-gradient transform -rotate-12"
                     />
                 </div>
-                <div className="absolute bottom-10 left-10 w-48 h-48 opacity-60 animate-float-medium pointer-events-none z-0 mix-blend-screen">
+                <div className="absolute top-20 right-[-50px] md:right-10 w-64 h-64 md:w-[450px] md:h-[450px] opacity-100 animate-float-medium pointer-events-none z-0 mix-blend-lighten">
                     <img
                         src="https://images.unsplash.com/photo-1614726365723-49cfa1118671?q=80&w=500&auto=format&fit=crop"
                         alt="3D Sphere"
-                        className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(236,72,153,0.5)] rounded-full"
+                        className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(59,130,246,0.6)] rounded-full"
                     />
                 </div>
 
