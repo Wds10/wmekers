@@ -69,6 +69,24 @@ export default function PaymentSuccess() {
                     setSignedUrl(result.signedUrl);
                     if (result.filename) setFilename(result.filename);
 
+                    // RECORD PURCHASE (Client-Side Fallback)
+                    // Since backend uses Anon Key and might fail to write to 'transactions',
+                    // we try to write it here using the User's Auth Token.
+                    const { data: { user } } = await supabase.auth.getUser();
+                    if (user && result.model) {
+                        await supabase.from('transactions').upsert({
+                            buyer_id: user.id,
+                            model_id: modelId,
+                            amount: result.model.price,
+                            platform_fee: result.model.price * 0.1,
+                            seller_earnings: result.model.price * 0.9,
+                            payment_method: 'mercadopago',
+                            status: 'completed',
+                            payment_id: paymentId,
+                            updated_at: new Date().toISOString()
+                        }, { onConflict: 'payment_id' });
+                    }
+
                     // Force persist in LocalStorage as backup
                     if (result.signedUrl && modelId) {
                         localStorage.setItem(`purchased_${modelId}`, result.signedUrl);
