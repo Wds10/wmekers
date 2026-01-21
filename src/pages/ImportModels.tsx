@@ -1,8 +1,7 @@
 
 import { useState } from 'react';
-import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
-import { UploadCloud, AlertCircle, CheckCircle, ArrowLeft } from 'lucide-react';
+import { UploadCloud, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function ImportModels() {
@@ -109,9 +108,9 @@ export default function ImportModels() {
                         )}
                         {logs.map((log, i) => (
                             <div key={i} className={`p-2 rounded border border-transparent ${log.type === 'error' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
-                                    log.type === 'success' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
-                                        log.type === 'warning' ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' :
-                                            'text-gray-400'
+                                log.type === 'success' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
+                                    log.type === 'warning' ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/20' :
+                                        'text-gray-400'
                                 }`}>
                                 <span className="opacity-50 mr-2">[{log.time}]</span>
                                 {log.msg}
