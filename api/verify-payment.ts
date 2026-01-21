@@ -133,7 +133,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             success: true,
             signedUrl: signedUrl || `${SUPABASE_URL}/storage/v1/object/public/models/${model.file_path}`,
             filename: model.file_path.split('/').pop(), // Extract filename
-            message: 'Purchase verified and recorded'
+            message: 'Purchase verified and recorded',
+            model: model // Return model details for frontend fallback recording
         });
 
     } catch (error: any) {
