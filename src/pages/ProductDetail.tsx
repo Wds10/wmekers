@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
@@ -190,6 +191,14 @@ export default function ProductDetail() {
     };
 
     const handleDownload = async (overriddenUrl?: string) => {
+        // Enforce Login for ALL downloads (Fixed per User Request)
+        if (!user) {
+            // Redirect to Login if not authenticated
+            alert("Debes estar registrado para descargar modelos (incluso gratuitos). Redirigiendo al Login...");
+            window.location.href = '/login';
+            return;
+        }
+
         // Use source_url for imported models if available
         const targetUrl = overriddenUrl || (model.is_imported && model.source_url ? model.source_url : signedUrl);
 
@@ -213,7 +222,9 @@ export default function ProductDetail() {
                 console.error("Blob download failed, falling back to direct link", err);
                 const a = document.createElement('a');
                 a.href = targetUrl;
-                a.download = model.file_path?.split('/').pop() || 'model.stl';
+                // Still try to force name
+                const cleanTitle = model.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                a.download = `${cleanTitle}.stl`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -236,19 +247,9 @@ export default function ProductDetail() {
 
     const [showPaymentModal, setShowPaymentModal] = useState(false);
 
-    // OPTIMISTIC SUCCESS RENDER (Prevents Black Screen)
-    // If URL indicates success, show the view IMMEDIATELY while data loads in background.
-    // Recovery/Success View Logic
-    // if (isPaymentApproved || hasPurchased) { ... } REMOVED - Using PaymentSuccess page now.
-
     // Safe Render: Ensure model exists before accessing properties
     if (loading) return <div className="flex justify-center items-center h-96"><Loader2 className="animate-spin text-primary" size={48} /></div>;
     if (!model) return <div className="text-center p-12 text-xl">Model not found</div>;
-
-    // RECOVERY VIEW REMOVED - Backend handles verification now.
-
-
-    // Old Success View removed (moved to top for Optimistic Render)
 
     const isArgentina = profile?.country === 'Argentina';
 
@@ -328,11 +329,11 @@ export default function ProductDetail() {
                     ) : (
                         model.price === 0 ? (
                             <button
-                                onClick={() => handleDownload()} // Direct download logic
+                                onClick={() => handleDownload()} // Login Check inside handleDownload
                                 className="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-bold text-lg rounded-lg transition-all shadow-[0_0_20px_rgba(22,163,74,0.4)] hover:shadow-[0_0_30px_rgba(22,163,74,0.6)] flex items-center justify-center space-x-2"
                             >
                                 <Package size={20} />
-                                <span>Descargar Gratis</span>
+                                <span>Descarga Gratis</span>
                             </button>
                         ) : (
                             <button
@@ -395,10 +396,10 @@ export default function ProductDetail() {
                                     <div className="space-y-3">
                                         {model.price === 0 ? (
                                             <button
-                                                onClick={() => handleDownload()} // Directly download if free
+                                                onClick={() => handleDownload()} // Checks for user
                                                 className="w-full flex items-center justify-center p-4 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-all shadow-md font-bold text-lg"
                                             >
-                                                Descargar Gratis
+                                                Descarga Gratis
                                             </button>
                                         ) : (
                                             <>
