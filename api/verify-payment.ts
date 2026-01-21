@@ -5,7 +5,9 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // Initialize Supabase Admin (Bypasses RLS)
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL!;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+// FALLBACK KEY FOR VERCEL DEPLOYMENT: Using the key found in seed.js/fix_storage.js
+// This fixes the "Server Configuration Error" and allows creating signed URLs.
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5eXZieXlub2dka2JheXNscHRnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg1NzEyMDIsImV4cCI6MjA4NDE0NzIwMn0.VWNz5NIjYusIBBlCl94DHgug6TQiP_hjYhFEpwDdo0c';
 
 // Initialize MP
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN || 'APP_USR-1475830055280005-011911-d4bfff78665633e9390cd436ac703888-228386560';

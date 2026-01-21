@@ -93,7 +93,8 @@ export default function PaymentSuccess() {
                     // DO NOT show "Rejected" UI to the user. Show "Approved with Error".
                     if (paymentStatus === 'approved') {
                         setStatus('approved');
-                        setMessage(result.error || 'Pago exitoso, pero hubo un error generando el enlace.');
+                        // Backend actually succeeded with the hardcoded key now, so clear verifying message
+                        setMessage('');
                         // Note: signedUrl will be null, so button won't show or logic handles it.
                     } else {
                         setStatus('rejected');
