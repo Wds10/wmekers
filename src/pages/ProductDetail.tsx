@@ -194,13 +194,30 @@ export default function ProductDetail() {
         const targetUrl = overriddenUrl || (model.is_imported && model.source_url ? model.source_url : signedUrl);
 
         if (targetUrl) {
-            const a = document.createElement('a');
-            a.href = targetUrl;
-            // Use specific name or extract from URL
-            a.download = model.file_path?.split('/').pop() || 'model.stl';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+            try {
+                // Fetch blob to force filename (fix for "Random file" complaint)
+                const response = await fetch(targetUrl);
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                // Clean title for filename
+                const cleanTitle = model.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                a.download = `${cleanTitle}.stl`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                console.error("Blob download failed, falling back to direct link", err);
+                const a = document.createElement('a');
+                a.href = targetUrl;
+                a.download = model.file_path?.split('/').pop() || 'model.stl';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
             return;
         }
 

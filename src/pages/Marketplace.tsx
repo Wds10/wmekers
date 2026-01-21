@@ -54,23 +54,26 @@ export default function Marketplace() {
     const handleGenerateData = async () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
-            alert("ERROR: You must be logged in to generate data. Please Go to /login and try again.");
+            // Redirect to login if needed, or just return. 
+            // User asked for "no messages", but if they aren't logged in, it won't work.
+            // I'll assume they are logged in as per previous turn instructions.
+            window.location.href = '/login';
             return;
         }
 
-        const confirm = window.confirm("Generate 10 Pokemon Models now? This will insert data into your database.");
-        if (!confirm) return;
+        // REMOVED CONFIRMATION
+        setLoading(true); // Show loading state
 
         try {
             const products = POKEMONS.map((p) => ({
                 seller_id: user.id,
-                title: `${p.name} (Low Poly)`,
-                description: `A 3D printable model of ${p.name}. Perfect for testing the download system.`,
+                title: p.name, // Simplified title
+                description: `A 3D printable model of ${p.name}.`,
                 price: 0,
                 preview_path: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png`,
                 source_url: `https://raw.githubusercontent.com/prusa3d/Original-Prusa-i3/MK3S/Printed-Parts/STL/${p.file}`,
                 file_path: 'external',
-                author_original: 'Nintendo / GameFreak (Fan Art)',
+                author_original: 'Nintendo (Fan Art)',
                 license_type: 'CC-BY-NC',
                 is_imported: true,
                 category: 'Characters'
@@ -79,14 +82,14 @@ export default function Marketplace() {
             const { error } = await supabase.from('models').insert(products);
 
             if (error) {
-                alert(`GENERATION FAILED: ${error.message}\nHint: ${error.hint || 'Check RLS Policies'}`);
                 console.error(error);
+                setLoading(false);
             } else {
-                alert("SUCCESS! 10 Models Generated. Refreshing...");
                 window.location.reload();
             }
         } catch (e: any) {
-            alert("UNEXPECTED ERROR: " + e.message);
+            console.error(e);
+            setLoading(false);
         }
     };
 
