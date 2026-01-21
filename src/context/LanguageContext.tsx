@@ -14,6 +14,9 @@ type Translations = {
             signout: string;
         };
         marketplace: {
+            search: string;
+            view: string;
+            free_header: string;
             categories: {
                 all: string;
                 characters: string;
@@ -87,6 +90,9 @@ const translations: Translations = {
             signout: 'Cerrar Sesión'
         },
         marketplace: {
+            search: 'Buscar modelos...',
+            view: 'Ver Detalles',
+            free_header: 'Modelos Gratis',
             categories: {
                 all: 'Todos',
                 characters: 'Personajes',
@@ -157,10 +163,13 @@ const translations: Translations = {
             signout: 'Sign Out'
         },
         marketplace: {
+            search: 'Search models...',
+            view: 'View Details',
+            free_header: 'Free Models',
             categories: {
                 all: 'All',
                 characters: 'Characters',
-                vehicles: 'Vehicles',
+                vehicles: 'Vehículos',
                 props: 'Props',
                 art: 'Art'
             }
