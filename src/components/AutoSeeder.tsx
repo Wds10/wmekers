@@ -28,10 +28,10 @@ export function AutoSeeder() {
             hasRun.current = true;
 
             if (!user) {
-                // Silent return or log warning for debugging
                 console.warn("AutoSeeder: User not logged in. Cannot seed.");
-                // alert("Please Log In to generating the Pokemon Data."); // Removed alert to be less intrusive, but maybe necessary?
-                // The user is likely logged in as they are testing.
+                // Prompt user to login if they are verifying setup
+                const shouldLogin = window.confirm("System: The 10 Pokemon models are missing from the database. You must be LOGGED IN to auto-generate them. Do you want to go to the Login page?");
+                if (shouldLogin) window.location.href = '/login';
                 return;
             }
 
