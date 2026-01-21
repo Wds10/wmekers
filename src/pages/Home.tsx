@@ -62,9 +62,9 @@ export default function Home() {
 
                     {/* LEFT SIDE CHARACTERS (Hidden on mobile) */}
                     <div className="hidden xl:flex flex-col gap-12 items-center p-4 animate-in slide-in-from-left duration-1000">
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png" className="w-48 h-48 object-contain drop-shadow-[0_0_20px_rgba(234,179,8,0.5)] animate-float-slow hover:scale-110 transition-transform" alt="Charizard" />
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png" className="w-56 h-56 object-contain drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] animate-float-medium hover:scale-110 transition-transform" alt="Mewtwo" />
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" className="w-32 h-32 object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.5)] animate-float-fast hover:scale-110 transition-transform" alt="Groot" />
+                        <img src="https://images.unsplash.com/photo-1613771404721-c5b4e3f43350?auto=format&fit=crop&w=500&q=80" className="w-48 h-48 object-contain drop-shadow-[0_0_20px_rgba(234,179,8,0.5)] animate-float-slow hover:scale-110 transition-transform rounded-xl grayscale-[0.2]" alt="Charizard 3D" />
+                        <img src="https://images.unsplash.com/photo-1596727147705-53a9d020d0e1?auto=format&fit=crop&w=500&q=80" className="w-56 h-56 object-contain drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] animate-float-medium hover:scale-110 transition-transform rounded-xl grayscale-[0.2]" alt="Mewtwo 3D" />
+                        <img src="https://images.unsplash.com/photo-1626278664285-f796b961805d?auto=format&fit=crop&w=500&q=80" className="w-32 h-32 object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.5)] animate-float-fast hover:scale-110 transition-transform rounded-xl secondary" alt="Groot 3D" />
                     </div>
 
                     {/* CENTER FEATURES (Original Content) */}

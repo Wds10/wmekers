@@ -5,11 +5,11 @@ import { Search, ShoppingBag } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 const DEMO_MODELS = [
-    // Free Section (Pokemon / Plants)
-    { id: '1', title: 'Charizard (Dragón Fuego)', price: 0, category: 'Characters', preview_path: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png', profiles: { full_name: 'Nintendo Fan' } },
-    { id: '2', title: 'Mewtwo (Psíquico)', price: 0, category: 'Characters', preview_path: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png', profiles: { full_name: 'Legendary' } },
-    { id: '3', title: 'Groot (Baby)', price: 0, category: 'Characters', preview_path: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png', profiles: { full_name: 'Marvel Fan' } },
-    { id: '4', title: 'Pikachu (Eléctrico)', price: 0, category: 'Characters', preview_path: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png', profiles: { full_name: 'Ash K.' } },
+    // Free Section (Pokemon / Plants) - Using 3D Figure Images
+    { id: '1', title: 'Charizard (Dragón Fuego)', price: 0, category: 'Characters', preview_path: 'https://images.unsplash.com/photo-1613771404721-c5b4e3f43350?auto=format&fit=crop&w=500&q=80', profiles: { full_name: 'Nintendo Fan' } },
+    { id: '2', title: 'Mewtwo (Psíquico)', price: 0, category: 'Characters', preview_path: 'https://images.unsplash.com/photo-1596727147705-53a9d020d0e1?auto=format&fit=crop&w=500&q=80', profiles: { full_name: 'Legendary' } },
+    { id: '3', title: 'Groot (Baby)', price: 0, category: 'Characters', preview_path: 'https://images.unsplash.com/photo-1626278664285-f796b961805d?auto=format&fit=crop&w=500&q=80', profiles: { full_name: 'Marvel Fan' } },
+    { id: '4', title: 'Pikachu (Eléctrico)', price: 0, category: 'Characters', preview_path: 'https://images.unsplash.com/photo-1605979255459-02350aa73312?auto=format&fit=crop&w=500&q=80', profiles: { full_name: 'Ash K.' } },
 
     // Premium Section (Robots / Cars / Heroes)
     { id: '5', title: 'Optimus Prime (Líder)', price: 15, category: 'Vehicles', preview_path: 'https://images.unsplash.com/photo-1608270586620-25fd19606384?auto=format&fit=crop&w=500&q=80', profiles: { full_name: 'Cybertron' } },
