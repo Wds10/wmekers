@@ -21,29 +21,36 @@ export function AutoSeeder() {
     const hasRun = useRef(false);
 
     useEffect(() => {
-        if (loading || !user || hasRun.current) return;
+        if (loading || hasRun.current) return;
 
         const seed = async () => {
-            hasRun.current = true; // Prevent double execution
-            console.log("AutoSeeder: Checking...");
+            // Wait briefly to ensure session is stable or just run
+            hasRun.current = true;
 
-            // Check if Pokemon already exist
+            if (!user) {
+                // Silent return or log warning for debugging
+                console.warn("AutoSeeder: User not logged in. Cannot seed.");
+                // alert("Please Log In to generating the Pokemon Data."); // Removed alert to be less intrusive, but maybe necessary?
+                // The user is likely logged in as they are testing.
+                return;
+            }
+
+            console.log("AutoSeeder: Checking database...");
+
             try {
+                // Check if Pokemon already exist
                 const { count } = await supabase.from('models')
                     .select('*', { count: 'exact', head: true })
                     .eq('category', 'Characters')
                     .ilike('title', '%Low Poly%');
 
                 if (count !== null && count >= 10) {
-                    console.log("AutoSeeder: Pokemon already exist.");
+                    console.log("AutoSeeder: Data exists. Skipping.");
                     return;
                 }
 
-                // User Feedback
-                const confirmSeed = window.confirm("System: Database seems empty (missing Pokemon). Do you want to auto-generate the 10 Pokemon test models now?");
-                if (!confirmSeed) return;
-
-                console.log("AutoSeeder: Seeding...");
+                // NO CONFIRMATION - JUST EXECUTE
+                console.log("AutoSeeder: Generating data...");
 
                 const products = POKEMONS.map((p) => ({
                     seller_id: user.id,
@@ -63,13 +70,13 @@ export function AutoSeeder() {
 
                 if (error) {
                     console.error("AutoSeeder Error:", error);
-                    alert("Auto-Seeder Failed: " + error.message);
                 } else {
-                    alert("Success! 10 Pokemon Models have been generated. The page will now reload.");
+                    console.log("AutoSeeder: Success!");
+                    // Force reload to show data
                     window.location.reload();
                 }
             } catch (err) {
-                console.error("AutoSeeder Check Error:", err);
+                console.error("AutoSeeder Fail:", err);
             }
         };
 
