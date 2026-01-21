@@ -251,9 +251,33 @@ export default function ProductDetail() {
             <div className="space-y-8">
                 <div>
                     <h1 className="text-4xl font-bold mb-2">{model.title || 'Untitled Model'}</h1>
-                    <div className="flex items-center space-x-2 text-gray-400">
-                        <UserIcon size={16} />
-                        <span>{t.product.created_by} <span className="text-white font-medium">{model.profiles?.full_name || 'Unknown'}</span></span>
+
+                    {/* Attribution / Author Info */}
+                    <div className="space-y-1">
+                        {model.is_imported ? (
+                            <>
+                                <div className="flex items-center space-x-2 text-gray-400">
+                                    <UserIcon size={16} />
+                                    <span>
+                                        Original Author: <span className="text-white font-medium">{model.author_original || 'Unknown'}</span>
+                                    </span>
+                                </div>
+                                <div className="flex items-center space-x-2 text-xs text-gray-500">
+                                    <span>Source:</span>
+                                    <a href={model.source_url} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 underline truncate max-w-[200px]">
+                                        {model.source_url}
+                                    </a>
+                                </div>
+                                <div className="inline-flex items-center space-x-1 px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded border border-blue-500/30 mt-1">
+                                    <span>Auto-Imported</span>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="flex items-center space-x-2 text-gray-400">
+                                <UserIcon size={16} />
+                                <span>{t.product.created_by} <span className="text-white font-medium">{model.profiles?.full_name || 'Unknown'}</span></span>
+                            </div>
+                        )}
                     </div>
                 </div>
 
