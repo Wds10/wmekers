@@ -108,8 +108,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             }, { onConflict: 'payment_id' }); // Avoid duplicates
 
         if (txError) {
-            console.error("DB Insert Error:", txError);
-            throw txError;
+            console.error("DB Insert Error (Non-fatal, proceeding to download):", txError);
+            // throw txError; // COMMENTED OUT to ensure user gets their file even if DB recording fails
         }
 
         let signedUrl;
