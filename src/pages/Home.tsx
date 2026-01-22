@@ -61,10 +61,12 @@ export default function Home() {
                 <div className="max-w-[1800px] mx-auto grid grid-cols-1 xl:grid-cols-[1fr_2fr_1fr] gap-8 items-center">
 
                     {/* LEFT SIDE CHARACTERS (Hidden on mobile) */}
-                    <div className="hidden xl:flex flex-col gap-12 items-center p-4 animate-in slide-in-from-left duration-1000">
-                        <img src="https://images.unsplash.com/photo-1613771404721-c5b4e3f43350?auto=format&fit=crop&w=500&q=80" className="w-48 h-48 object-contain drop-shadow-[0_0_20px_rgba(234,179,8,0.5)] animate-float-slow hover:scale-110 transition-transform rounded-xl grayscale-[0.2]" alt="Charizard 3D" />
-                        <img src="https://images.unsplash.com/photo-1596727147705-53a9d020d0e1?auto=format&fit=crop&w=500&q=80" className="w-56 h-56 object-contain drop-shadow-[0_0_20px_rgba(168,85,247,0.5)] animate-float-medium hover:scale-110 transition-transform rounded-xl grayscale-[0.2]" alt="Mewtwo 3D" />
-                        <img src="https://images.unsplash.com/photo-1626278664285-f796b961805d?auto=format&fit=crop&w=500&q=80" className="w-32 h-32 object-contain drop-shadow-[0_0_20px_rgba(34,197,94,0.5)] animate-float-fast hover:scale-110 transition-transform rounded-xl secondary" alt="Groot 3D" />
+                    {/* LEFT SIDE CHARACTERS (2x2 Grid) */}
+                    <div className="hidden xl:grid grid-cols-2 gap-6 p-4 animate-in slide-in-from-left duration-1000">
+                        <img src="https://images.unsplash.com/photo-1613771404721-c5b4e3f43350?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] hover:scale-105 transition-transform grayscale-[0.2]" alt="Charizard" />
+                        <img src="https://images.unsplash.com/photo-1596727147705-53a9d020d0e1?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(168,85,247,0.5)] hover:scale-105 transition-transform mt-8 grayscale-[0.2]" alt="Mewtwo" />
+                        <img src="https://images.unsplash.com/photo-1626278664285-f796b961805d?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:scale-105 transition-transform grayscale-[0.2]" alt="Groot" />
+                        <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:scale-105 transition-transform mt-8 grayscale-[0.2]" alt="Saint Seiya" />
                     </div>
 
                     {/* CENTER FEATURES (Original Content) */}
@@ -112,10 +114,12 @@ export default function Home() {
                     </div>
 
                     {/* RIGHT SIDE CHARACTERS (Hidden on mobile) */}
-                    <div className="hidden xl:flex flex-col gap-12 items-center p-4 animate-in slide-in-from-right duration-1000">
-                        <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=500&q=80" className="w-56 h-56 object-contain drop-shadow-[0_0_20px_rgba(239,68,68,0.5)] animate-float-medium hover:scale-110 transition-transform" alt="Spiderman" />
-                        <img src="https://images.unsplash.com/photo-1608270586620-25fd19606384?auto=format&fit=crop&w=500&q=80" className="w-48 h-48 object-contain drop-shadow-[0_0_20px_rgba(59,130,246,0.5)] animate-float-slow hover:scale-110 transition-transform" alt="Optimus" />
-                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=500&q=80" className="w-64 h-32 object-contain drop-shadow-[0_0_20px_rgba(236,72,153,0.5)] animate-float-fast hover:scale-110 transition-transform" alt="Car" />
+                    {/* RIGHT SIDE CHARACTERS (2x2 Grid) */}
+                    <div className="hidden xl:grid grid-cols-2 gap-6 p-4 animate-in slide-in-from-right duration-1000">
+                        <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(239,68,68,0.5)] hover:scale-105 transition-transform" alt="Saint Seiya 2" />
+                        <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(239,68,68,0.5)] hover:scale-105 transition-transform mt-8" alt="Spiderman" />
+                        <img src="https://images.unsplash.com/photo-1608270586620-25fd19606384?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:scale-105 transition-transform" alt="Optimus" />
+                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(236,72,153,0.5)] hover:scale-105 transition-transform mt-8" alt="Car" />
                     </div>
                 </div>
             </section>
