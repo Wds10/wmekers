@@ -56,30 +56,29 @@ export default function Home() {
             </section>
 
             {/* "Spotify-style" Categories/Features */}
-            {/* Features Section with Side Characters */}
+            {/* Features Section with Side Characters (2x2 Grids) */}
             <section className="relative z-10 py-20 px-4 w-full overflow-hidden">
-                <div className="max-w-[1800px] mx-auto grid grid-cols-1 xl:grid-cols-[1fr_2fr_1fr] gap-8 items-center">
+                <div className="max-w-[1920px] mx-auto grid grid-cols-1 xl:grid-cols-[1fr_1.5fr_1fr] gap-4 items-center">
 
-                    {/* LEFT SIDE CHARACTERS (Hidden on mobile) */}
                     {/* LEFT SIDE CHARACTERS (2x2 Grid) */}
                     <div className="hidden xl:grid grid-cols-2 gap-6 p-4 animate-in slide-in-from-left duration-1000">
-                        <img src="https://images.unsplash.com/photo-1613771404721-c5b4e3f43350?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] hover:scale-105 transition-transform grayscale-[0.2]" alt="Charizard" />
-                        <img src="https://images.unsplash.com/photo-1596727147705-53a9d020d0e1?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(168,85,247,0.5)] hover:scale-105 transition-transform mt-8 grayscale-[0.2]" alt="Mewtwo" />
-                        <img src="https://images.unsplash.com/photo-1626278664285-f796b961805d?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:scale-105 transition-transform grayscale-[0.2]" alt="Groot" />
-                        <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:scale-105 transition-transform mt-8 grayscale-[0.2]" alt="Saint Seiya" />
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/6.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] hover:scale-110 transition-transform" alt="Charizard" />
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/150.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.5)] hover:scale-110 transition-transform mt-8" alt="Mewtwo" />
+                        <img src="https://images.unsplash.com/photo-1626278664285-f796b961805d?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:scale-105 transition-transform" alt="Groot" />
+                        <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:scale-105 transition-transform mt-8" alt="Saint Seiya" />
                     </div>
 
-                    {/* CENTER FEATURES (Original Content) */}
-                    <div className="max-w-4xl mx-auto space-y-12">
+                    {/* CENTER FEATURES */}
+                    <div className="max-w-4xl mx-auto space-y-12 px-4">
                         <div className="text-center space-y-4">
                             <h2 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
                                 ¿Por qué W3D Market?
                             </h2>
                             <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                                La plataforma definitiva para tus necesidades de impresión 3D.
+                                La plataforma definitiva para tus necesidades de impresión 3D en Argentina.
                             </p>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {[
                                 {
                                     icon: <Box className="text-secondary" size={32} />,
@@ -113,7 +112,6 @@ export default function Home() {
                         </div>
                     </div>
 
-                    {/* RIGHT SIDE CHARACTERS (Hidden on mobile) */}
                     {/* RIGHT SIDE CHARACTERS (2x2 Grid) */}
                     <div className="hidden xl:grid grid-cols-2 gap-6 p-4 animate-in slide-in-from-right duration-1000">
                         <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(239,68,68,0.5)] hover:scale-105 transition-transform" alt="Saint Seiya 2" />
