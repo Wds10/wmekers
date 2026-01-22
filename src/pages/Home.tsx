@@ -58,52 +58,56 @@ export default function Home() {
             {/* "Spotify-style" Categories/Features */}
             {/* Features Section with Side Characters (2x2 Grids) */}
             <section className="relative z-10 py-20 px-4 w-full overflow-hidden">
-                <div className="max-w-[1920px] mx-auto grid grid-cols-1 xl:grid-cols-[1fr_1.5fr_1fr] gap-4 items-center">
+                {/* Reference Background */}
+                <div className="absolute inset-0 bg-[url('/images/reference_collage.png')] bg-cover bg-center opacity-5 pointer-events-none mix-blend-overlay"></div>
+
+                <div className="max-w-[1920px] mx-auto grid grid-cols-1 xl:grid-cols-[1fr_1.5fr_1fr] gap-4 items-center relative z-10">
 
                     {/* LEFT SIDE CHARACTERS (2x2 Grid) */}
                     <div className="hidden xl:grid grid-cols-2 gap-6 p-4 animate-in slide-in-from-left duration-1000">
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/6.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] hover:scale-110 transition-transform" alt="Charizard" />
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/150.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.5)] hover:scale-110 transition-transform mt-8" alt="Mewtwo" />
-                        <img src="https://images.unsplash.com/photo-1626278664285-f796b961805d?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:scale-105 transition-transform" alt="Groot" />
-                        <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:scale-105 transition-transform mt-8" alt="Saint Seiya" />
+                        {/* Applied 'hue-rotate' and 'saturate' to match the purple/blue reference aesthetic */}
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/6.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] hover:scale-110 transition-transform filter brightness-90 contrast-125 saturate-150 hue-rotate-[15deg]" alt="Charizard" />
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/150.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] hover:scale-110 transition-transform mt-8 filter brightness-110 contrast-110 saturate-150" alt="Mewtwo" />
+                        <img src="https://images.unsplash.com/photo-1626278664285-f796b961805d?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(168,85,247,0.4)] hover:scale-105 transition-transform filter sepia-[0.3] hue-rotate-[230deg] saturate-150" alt="Groot" />
+                        <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:scale-105 transition-transform mt-8 filter sepia-[0.2] hue-rotate-[190deg] saturate-150" alt="Saint Seiya" />
                     </div>
 
                     {/* CENTER FEATURES */}
                     <div className="max-w-4xl mx-auto space-y-12 px-4">
                         <div className="text-center space-y-4">
-                            <h2 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+                            <h2 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-200 via-white to-purple-200 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">
                                 ¿Por qué W3D Market?
                             </h2>
-                            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+                            <p className="text-gray-300 max-w-2xl mx-auto text-lg drop-shadow-md">
                                 La plataforma definitiva para tus necesidades de impresión 3D en Argentina.
                             </p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             {[
                                 {
-                                    icon: <Box className="text-secondary" size={32} />,
+                                    icon: <Box className="text-purple-400" size={32} />,
                                     title: t.home.feat_quality_title,
                                     desc: t.home.feat_quality_desc,
-                                    color: "from-secondary/20 to-purple-900/20"
+                                    color: "from-purple-900/40 to-indigo-900/40"
                                 },
                                 {
                                     icon: <ShieldCheck className="text-blue-400" size={32} />,
                                     title: t.home.feat_secure_title,
                                     desc: t.home.feat_secure_desc,
-                                    color: "from-blue-500/20 to-cyan-900/20"
+                                    color: "from-blue-900/40 to-cyan-900/40"
                                 },
                                 {
-                                    icon: <Zap className="text-green-400" size={32} />,
+                                    icon: <Zap className="text-pink-400" size={32} />,
                                     title: t.home.feat_instant_title,
                                     desc: t.home.feat_instant_desc,
-                                    color: "from-green-500/20 to-emerald-900/20"
+                                    color: "from-pink-900/40 to-fuchsia-900/40"
                                 }
                             ].map((feature, i) => (
-                                <div key={i} className={`p-6 rounded-2xl bg-gradient-to-br ${feature.color} border border-white/10 backdrop-blur-sm hover:translate-y-[-5px] transition-all duration-300 group`}>
-                                    <div className="mb-4 p-3 bg-black/40 rounded-xl w-fit group-hover:scale-110 transition-transform duration-300 border border-white/5">
+                                <div key={i} className={`p-6 rounded-2xl bg-gradient-to-br ${feature.color} border border-white/10 backdrop-blur-md hover:translate-y-[-5px] transition-all duration-300 group shadow-[0_0_20px_rgba(0,0,0,0.3)] hover:shadow-[0_0_25px_rgba(168,85,247,0.2)]`}>
+                                    <div className="mb-4 p-3 bg-black/60 rounded-xl w-fit group-hover:scale-110 transition-transform duration-300 border border-white/10 shadow-inner">
                                         {feature.icon}
                                     </div>
-                                    <h3 className="text-xl font-bold mb-2 text-gray-100">{feature.title}</h3>
+                                    <h3 className="text-xl font-bold mb-2 text-white">{feature.title}</h3>
                                     <p className="text-gray-400 leading-relaxed text-sm">
                                         {feature.desc}
                                     </p>
@@ -114,10 +118,10 @@ export default function Home() {
 
                     {/* RIGHT SIDE CHARACTERS (2x2 Grid) */}
                     <div className="hidden xl:grid grid-cols-2 gap-6 p-4 animate-in slide-in-from-right duration-1000">
-                        <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(239,68,68,0.5)] hover:scale-105 transition-transform" alt="Saint Seiya 2" />
-                        <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(239,68,68,0.5)] hover:scale-105 transition-transform mt-8" alt="Spiderman" />
-                        <img src="https://images.unsplash.com/photo-1608270586620-25fd19606384?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:scale-105 transition-transform" alt="Optimus" />
-                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl drop-shadow-[0_0_15px_rgba(236,72,153,0.5)] hover:scale-105 transition-transform mt-8" alt="Car" />
+                        <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(239,68,68,0.4)] hover:scale-105 transition-transform filter sepia-[0.4] hue-rotate-[280deg] saturate-150" alt="Saint Seiya 2" />
+                        <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(139,92,246,0.4)] hover:scale-105 transition-transform mt-8 filter sepia-[0.3] hue-rotate-[240deg] saturate-150" alt="Spiderman" />
+                        <img src="https://images.unsplash.com/photo-1608270586620-25fd19606384?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:scale-105 transition-transform filter sepia-[0.4] hue-rotate-[200deg] saturate-150 brightness-110" alt="Optimus" />
+                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(236,72,153,0.4)] hover:scale-105 transition-transform mt-8 filter sepia-[0.2] hue-rotate-[290deg] saturate-150" alt="Car" />
                     </div>
                 </div>
             </section>

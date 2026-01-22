@@ -75,7 +75,7 @@ export default function Marketplace() {
                                     : `${supabase.storage.from('previews').getPublicUrl(model.preview_path).data.publicUrl}?t=${new Date().getTime()}`
                                 }
                                 alt={model.title}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 animate-float-slow"
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 animate-float-slow filter contrast-110 saturate-125"
                             />
                         ) : (
                             <div className="w-full h-full flex items-center justify-center bg-gray-900 text-gray-500">
