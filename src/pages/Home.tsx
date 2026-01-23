@@ -17,32 +17,32 @@ export default function Home() {
 
                 <div className="absolute top-10 left-[-50px] md:left-10 w-72 h-72 md:w-[500px] md:h-[500px] opacity-100 animate-float-slow pointer-events-none z-0">
                     <img
-                        src="https://images.unsplash.com/photo-1541434969-92c2b37aa0a5?q=80&w=1000&auto=format&fit=crop"
+                        src="/models_sliced/hero_xwing.png"
                         alt="3D Spaceship"
-                        className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(168,85,247,0.5)] mask-image-gradient transform -rotate-12"
+                        className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(168,85,247,0.5)] transform -rotate-12 filter brightness-125"
                     />
                 </div>
                 <div className="absolute top-20 right-[-50px] md:right-10 w-64 h-64 md:w-[450px] md:h-[450px] opacity-100 animate-float-medium pointer-events-none z-0 mix-blend-lighten">
                     <img
-                        src="https://images.unsplash.com/photo-1614726365723-49cfa1118671?q=80&w=500&auto=format&fit=crop"
+                        src="/models_sliced/hero_sphere.png"
                         alt="3D Sphere"
-                        className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(59,130,246,0.6)] rounded-full"
+                        className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(59,130,246,0.6)] rounded-full filter brightness-125"
                     />
                 </div>
 
                 <div className="relative z-10 text-center space-y-6 max-w-4xl px-4">
                     <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-black/50 border border-white/20 backdrop-blur-md text-sm text-gray-200 animate-in fade-in slide-in-from-bottom-4 duration-700">
                         <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-                        <span className="tracking-wide uppercase text-xs font-bold text-left whitespace-normal">{t.home.hero_badge}</span>
+                        <span className="tracking-wide uppercase text-xs font-bold text-left whitespace-normal">Unete a la Revolución</span>
                     </div>
 
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400 text-glow drop-shadow-2xl">
-                        {t.home.hero_title_1} <br />
-                        <span className="text-white">{t.home.hero_title_2}</span>
+                    <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400 text-glow drop-shadow-2xl">
+                        Comenzá Tu Modelo 3D <br />
+                        <span className="text-white">Hoy Mismo</span>
                     </h1>
 
                     <p className="text-xl text-gray-300 max-w-2xl mx-auto font-light">
-                        {t.home.hero_desc}
+                        Acceso perfecto a miles de archivos. Ir al Mercado.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
@@ -65,18 +65,18 @@ export default function Home() {
 
                     {/* LEFT SIDE CHARACTERS (2x2 Grid) */}
                     <div className="hidden xl:grid grid-cols-2 gap-6 p-4 animate-in slide-in-from-left duration-1000">
-                        <img src="/models_sliced/char_charizard.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] hover:scale-110 transition-transform filter brightness-125 contrast-125 mix-blend-screen" alt="Charizard" />
-                        <img src="/models_sliced/char_mewtwo.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] hover:scale-110 transition-transform mt-8 filter brightness-125 contrast-125 mix-blend-screen" alt="Mewtwo" />
-                        <img src="/models_sliced/char_groot.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.6)] hover:scale-110 transition-transform filter brightness-125 contrast-125 mix-blend-screen" alt="Groot" />
-                        <img src="/models_sliced/char_seiya_1.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] hover:scale-110 transition-transform mt-8 filter brightness-125 contrast-125 mix-blend-screen" alt="Saint Seiya" />
+                        <img src="/models_sliced/char_charizard.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] hover:scale-110 transition-transform filter brightness-125 contrast-125" alt="Charizard" />
+                        <img src="/models_sliced/char_mewtwo.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] hover:scale-110 transition-transform mt-8 filter brightness-125 contrast-125" alt="Mewtwo" />
+                        <img src="/models_sliced/char_groot.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.6)] hover:scale-110 transition-transform filter brightness-125 contrast-125" alt="Groot" />
+                        <img src="/models_sliced/char_seiya_1.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] hover:scale-110 transition-transform mt-8 filter brightness-125 contrast-125" alt="Saint Seiya" />
                     </div>
 
                     {/* CENTER FEATURES */}
                     <div className="max-w-4xl mx-auto space-y-12 px-4">
                         <div className="text-center space-y-4">
                             <div className="flex justify-center gap-8 mb-8">
-                                <img src="/models_sliced/hero_xwing.png" className="h-24 object-contain animate-float-slow mix-blend-screen" alt="X-Wing" />
-                                <img src="/models_sliced/hero_sphere.png" className="h-24 object-contain animate-float-medium mix-blend-screen" alt="Sphere" />
+                                <img src="/models_sliced/hero_xwing.png" className="h-24 object-contain animate-float-slow" alt="X-Wing" />
+                                <img src="/models_sliced/hero_sphere.png" className="h-24 object-contain animate-float-medium" alt="Sphere" />
                             </div>
                             <h2 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-200 via-white to-purple-200 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">
                                 ¿Por qué W3D Market?
@@ -121,10 +121,10 @@ export default function Home() {
 
                     {/* RIGHT SIDE CHARACTERS (2x2 Grid) */}
                     <div className="hidden xl:grid grid-cols-2 gap-6 p-4 animate-in slide-in-from-right duration-1000">
-                        <img src="/models_sliced/char_seiya_2.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(239,68,68,0.6)] hover:scale-105 transition-transform filter brightness-125 contrast-125 mix-blend-screen" alt="Saint Seiya 2" />
-                        <img src="/models_sliced/char_spiderman.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(139,92,246,0.6)] hover:scale-105 transition-transform mt-8 filter brightness-125 contrast-125 mix-blend-screen" alt="Spiderman" />
-                        <img src="/models_sliced/vehicle_optimus.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] hover:scale-105 transition-transform filter brightness-125 contrast-125 mix-blend-screen" alt="Optimus" />
-                        <img src="/models_sliced/vehicle_car.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(236,72,153,0.6)] hover:scale-105 transition-transform mt-8 filter brightness-125 contrast-125 mix-blend-screen" alt="Car" />
+                        <img src="/models_sliced/char_seiya_2.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(239,68,68,0.6)] hover:scale-105 transition-transform filter brightness-125 contrast-125" alt="Saint Seiya 2" />
+                        <img src="/models_sliced/char_spiderman.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(139,92,246,0.6)] hover:scale-105 transition-transform mt-8 filter brightness-125 contrast-125" alt="Spiderman" />
+                        <img src="/models_sliced/vehicle_optimus.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] hover:scale-105 transition-transform filter brightness-125 contrast-125" alt="Optimus" />
+                        <img src="/models_sliced/vehicle_car.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(236,72,153,0.6)] hover:scale-105 transition-transform mt-8 filter brightness-125 contrast-125" alt="Car" />
                     </div>
                 </div>
             </section>

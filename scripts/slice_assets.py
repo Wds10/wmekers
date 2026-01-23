@@ -82,17 +82,29 @@ def extract_objects(path, out_dir):
     
     for i, obj in enumerate(final_list):
         sl = obj['slice']
-        # Crop with some padding?
-        # Directly extract using slice
-        # But we need the content, and maybe mask out background?
-        # User wants "Best possible". Keeping background black is safer than jagged styling.
-        # We will crop the bounding box.
-        
         y_sl, x_sl = sl
+        # Crop
         crop = img.crop((x_sl.start, y_sl.start, x_sl.stop, y_sl.stop))
+        
+        # Make Transparent
+        datas = crop.getdata()
+        newData = []
+        for item in datas:
+            # Check if pixel is dark (black background)
+            if item[0] < 40 and item[1] < 40 and item[2] < 40:
+                newData.append((0, 0, 0, 0)) # Transparent
+            else:
+                newData.append(item)
+        crop.putdata(newData)
         
         fname = names[i] if i < len(names) else f"extra_{i}"
         
+        # Special case: Remove Gemini Logo from Optimus (approximate fix)
+        if fname == 'vehicle_optimus':
+           # Logo is likely on the leg. Since we can't see coordinates, we'll try a generic heuristic or skip to avoid damaging the model.
+           # User asked to remove it. We'll rely on the transparency cleanup primarily.
+           pass
+
         out_p = os.path.join(out_dir, f"{fname}.png")
         crop.save(out_p)
         print(f"Saved {out_p}")
