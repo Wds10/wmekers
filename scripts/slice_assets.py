@@ -91,7 +91,8 @@ def extract_objects(path, out_dir):
         newData = []
         for item in datas:
             # Check if pixel is dark (black background)
-            if item[0] < 40 and item[1] < 40 and item[2] < 40:
+            # Lower threshold to 15 to preserve dark purple edges of the sphere/ships
+            if item[0] < 20 and item[1] < 20 and item[2] < 20: 
                 newData.append((0, 0, 0, 0)) # Transparent
             else:
                 newData.append(item)
