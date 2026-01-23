@@ -60,13 +60,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         if (isCC0) license = 'CC0';
         else if (isCCBY) license = 'CC-BY';
-        else if (isNC || isND) {
-            // STRICT REJECTION
-            console.warn(`Blocking import due to restrictive license: NC=${isNC}, ND=${isND}`);
-            return res.status(400).json({
-                error: 'License Rejected. Only CC0 and CC-BY are allowed. Found Non-Commercial or No-Derivatives.'
-            });
+        else {
+            // USER REQUEST: BYPASS LICENSE CHECKS
+            // Check for NC/ND strings but ALLOW them.
+            if (isNC || isND) {
+                license = 'Imported (Restricted/Unknown)';
+                console.log(`Importing restricted license model (User Override): NC=${isNC}, ND=${isND}`);
+            } else {
+                license = 'Standard';
+            }
         }
+
+        // Extract Description and Image (Open Graph or common tags)
+        const imageMatch = html.match(/<meta property="og:image" content="([^"]+)"/i) || html.match(/"image":\s*"([^"]+)"/i);
+        const imageUrl = imageMatch ? imageMatch[1] : null;
+
+        const descMatch = html.match(/<meta property="og:description" content="([^"]+)"/i) || html.match(/name="description" content="([^"]+)"/i);
+        const description = descMatch ? descMatch[1] : 'No description found.';
 
         // 3. Find Download Link (Hardest part without an API)
         // Cults3D puts download behind a button that might need auth or is a redirect.
@@ -101,7 +111,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 author,
                 license,
                 source_url,
-                // file_url: ... // Hard to get without complexity
+                image_url: imageUrl,
+                description: description
             },
             message: "Metadata extracted. File download requires auth or specific scraping logic not fully implemented in MVP."
         });
