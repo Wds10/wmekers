@@ -65,16 +65,19 @@ export default function Home() {
 
                     {/* LEFT SIDE CHARACTERS (2x2 Grid) */}
                     <div className="hidden xl:grid grid-cols-2 gap-6 p-4 animate-in slide-in-from-left duration-1000">
-                        {/* Applied 'hue-rotate' and 'saturate' to match the purple/blue reference aesthetic */}
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/6.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] hover:scale-110 transition-transform filter brightness-90 contrast-125 saturate-150 hue-rotate-[15deg]" alt="Charizard" />
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/150.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] hover:scale-110 transition-transform mt-8 filter brightness-110 contrast-110 saturate-150" alt="Mewtwo" />
-                        <img src="https://images.unsplash.com/photo-1626278664285-f796b961805d?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(168,85,247,0.4)] hover:scale-105 transition-transform filter sepia-[0.3] hue-rotate-[230deg] saturate-150" alt="Groot" />
-                        <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:scale-105 transition-transform mt-8 filter sepia-[0.2] hue-rotate-[190deg] saturate-150" alt="Saint Seiya" />
+                        <img src="/models_sliced/char_charizard.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] hover:scale-110 transition-transform filter brightness-125 contrast-125 mix-blend-screen" alt="Charizard" />
+                        <img src="/models_sliced/char_mewtwo.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.6)] hover:scale-110 transition-transform mt-8 filter brightness-125 contrast-125 mix-blend-screen" alt="Mewtwo" />
+                        <img src="/models_sliced/char_groot.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(34,197,94,0.6)] hover:scale-110 transition-transform filter brightness-125 contrast-125 mix-blend-screen" alt="Groot" />
+                        <img src="/models_sliced/char_seiya_1.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] hover:scale-110 transition-transform mt-8 filter brightness-125 contrast-125 mix-blend-screen" alt="Saint Seiya" />
                     </div>
 
                     {/* CENTER FEATURES */}
                     <div className="max-w-4xl mx-auto space-y-12 px-4">
                         <div className="text-center space-y-4">
+                            <div className="flex justify-center gap-8 mb-8">
+                                <img src="/models_sliced/hero_xwing.png" className="h-24 object-contain animate-float-slow mix-blend-screen" alt="X-Wing" />
+                                <img src="/models_sliced/hero_sphere.png" className="h-24 object-contain animate-float-medium mix-blend-screen" alt="Sphere" />
+                            </div>
                             <h2 className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-purple-200 via-white to-purple-200 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">
                                 ¿Por qué W3D Market?
                             </h2>
@@ -118,10 +121,10 @@ export default function Home() {
 
                     {/* RIGHT SIDE CHARACTERS (2x2 Grid) */}
                     <div className="hidden xl:grid grid-cols-2 gap-6 p-4 animate-in slide-in-from-right duration-1000">
-                        <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(239,68,68,0.4)] hover:scale-105 transition-transform filter sepia-[0.4] hue-rotate-[280deg] saturate-150" alt="Saint Seiya 2" />
-                        <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(139,92,246,0.4)] hover:scale-105 transition-transform mt-8 filter sepia-[0.3] hue-rotate-[240deg] saturate-150" alt="Spiderman" />
-                        <img src="https://images.unsplash.com/photo-1608270586620-25fd19606384?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(59,130,246,0.4)] hover:scale-105 transition-transform filter sepia-[0.4] hue-rotate-[200deg] saturate-150 brightness-110" alt="Optimus" />
-                        <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=500&q=80" className="w-full h-48 object-cover rounded-xl border border-purple-500/20 drop-shadow-[0_0_15px_rgba(236,72,153,0.4)] hover:scale-105 transition-transform mt-8 filter sepia-[0.2] hue-rotate-[290deg] saturate-150" alt="Car" />
+                        <img src="/models_sliced/char_seiya_2.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(239,68,68,0.6)] hover:scale-105 transition-transform filter brightness-125 contrast-125 mix-blend-screen" alt="Saint Seiya 2" />
+                        <img src="/models_sliced/char_spiderman.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(139,92,246,0.6)] hover:scale-105 transition-transform mt-8 filter brightness-125 contrast-125 mix-blend-screen" alt="Spiderman" />
+                        <img src="/models_sliced/vehicle_optimus.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(59,130,246,0.6)] hover:scale-105 transition-transform filter brightness-125 contrast-125 mix-blend-screen" alt="Optimus" />
+                        <img src="/models_sliced/vehicle_car.png" className="w-full h-48 object-contain drop-shadow-[0_0_15px_rgba(236,72,153,0.6)] hover:scale-105 transition-transform mt-8 filter brightness-125 contrast-125 mix-blend-screen" alt="Car" />
                     </div>
                 </div>
             </section>
